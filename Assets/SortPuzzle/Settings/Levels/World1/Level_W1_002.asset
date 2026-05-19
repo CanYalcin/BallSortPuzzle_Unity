@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e2958b50b933b448b475d5de033f947, type: 3}
+  m_Name: Level_W1_002
+  m_EditorClassIdentifier: Assembly-CSharp::SortPuzzle.Data.LevelData
+  LevelIndex: 1
+  DisplayName: Level 2
+  SceneName: GameScene
+  SoftCurrencyReward: 20
+  HardCurrencyReward: 0
+  DifficultyRating: 3
+  TimeLimit: 0
+  GameSpeedMultiplier: 1
+  WorldIndex: 0
+  TubeCount: 6
+  EmptyTubeCount: 2
+  TubeCapacity: 4
+  ColorCount: 4
+  Tubes:
+  - Balls: 01000000020000000300000004000000
+  - Balls: 04000000030000000200000001000000
+  - Balls: 02000000010000000400000003000000
+  - Balls: 03000000040000000100000002000000
+  - Balls: 00000000000000000000000000000000
+  - Balls: 00000000000000000000000000000000
+  ParMoves: 12
+  ValidatedSolution: 
+  GoldReward: 20
+  ContainsUndoBoost: 1
+  ContainsShuffleBoost: 1
+  IsDailyLevel: 0

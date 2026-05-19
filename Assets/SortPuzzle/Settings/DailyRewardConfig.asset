@@ -1,0 +1,47 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8836942e01e0bb240a78e7ef04c2eb2e, type: 3}
+  m_Name: DailyRewardConfig
+  m_EditorClassIdentifier: Assembly-CSharp::SortPuzzle.Data.DailyRewardConfig
+  Milestones:
+  - StreakDay: 7
+    GoldBonus: 500
+    UndoBonus: 0
+    ShuffleTubeBonus: 0
+    ExtraEmptyTubeBonus: 0
+    UnlocksSkin: 0
+    SkinId: 
+    BadgeTitle: Week Warrior
+  - StreakDay: 14
+    GoldBonus: 1000
+    UndoBonus: 2
+    ShuffleTubeBonus: 0
+    ExtraEmptyTubeBonus: 0
+    UnlocksSkin: 0
+    SkinId: 
+    BadgeTitle: Two Week Champion
+  - StreakDay: 21
+    GoldBonus: 2000
+    UndoBonus: 0
+    ShuffleTubeBonus: 0
+    ExtraEmptyTubeBonus: 0
+    UnlocksSkin: 1
+    SkinId: world1_exclusive_tube
+    BadgeTitle: Dedicated Solver
+  - StreakDay: 30
+    GoldBonus: 5000
+    UndoBonus: 3
+    ShuffleTubeBonus: 3
+    ExtraEmptyTubeBonus: 3
+    UnlocksSkin: 0
+    SkinId: 
+    BadgeTitle: 30-Day Champion

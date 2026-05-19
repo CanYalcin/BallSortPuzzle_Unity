@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6764b5c2e25925440907a0f02b835361, type: 3}
+  m_Name: AdConfig
+  m_EditorClassIdentifier: Assembly-CSharp::HyperBase.Monetization.AdConfig
+  EnableAds: 0
+  EnableIAP: 0
+  EnableBanner: 0
+  EnableInterstitial: 0
+  EnableRewarded: 0
+  SdkKey: YOUR_APPLOVIN_SDK_KEY
+  Android_BannerAdUnitId: YOUR_ANDROID_BANNER_ID
+  Android_InterstitialAdUnitId: YOUR_ANDROID_INTERSTITIAL_ID
+  Android_RewardedAdUnitId: YOUR_ANDROID_REWARDED_ID
+  iOS_BannerAdUnitId: YOUR_IOS_BANNER_ID
+  iOS_InterstitialAdUnitId: YOUR_IOS_INTERSTITIAL_ID
+  iOS_RewardedAdUnitId: YOUR_IOS_REWARDED_ID
+  InterstitialCooldownSeconds: 30
+  InterstitialMinLevel: 3
+  ShowBannerOnStart: 0
+  BannerPosition: 7

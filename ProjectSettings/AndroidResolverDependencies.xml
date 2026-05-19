@@ -1,0 +1,46 @@
+<dependencies>
+  <packages>
+    <package>androidx.annotation:annotation:[1.2.0]</package>
+    <package>com.applovin:applovin-sdk:13.6.2</package>
+    <package>com.google.android.gms:play-services-ads-identifier:18.1.0</package>
+    <package>com.google.android.gms:play-services-appset:16.0.2</package>
+    <package>com.google.android.gms:play-services-base:18.10.0</package>
+    <package>com.google.android.instantapps:instantapps:1.1.0</package>
+    <package>com.google.firebase:firebase-analytics:23.0.0</package>
+    <package>com.google.firebase:firebase-analytics-unity:13.9.0</package>
+    <package>com.google.firebase:firebase-app-unity:13.9.0</package>
+    <package>com.google.firebase:firebase-common:22.0.1</package>
+    <package>com.google.firebase:firebase-config:23.0.1</package>
+    <package>com.google.firebase:firebase-config-unity:13.9.0</package>
+    <package>com.google.firebase:firebase-messaging-ktx:22.0.0</package>
+    <package>com.revenuecat.purchases:purchases-hybrid-common:[17.54.0]</package>
+    <package>com.unity3d.ads:unity-ads:4.18.0</package>
+    <package>com.unity3d.ads-mediation:mediation-sdk:9.4.2</package>
+    <package>com.unity3d.ads-mediation:unityads-adapter:5.7.0</package>
+  </packages>
+  <files>
+    <file>Assets/GeneratedLocalRepo/Firebase/m2repository/com/google/firebase/firebase-analytics-unity/13.9.0/firebase-analytics-unity-13.9.0.aar</file>
+    <file>Assets/GeneratedLocalRepo/Firebase/m2repository/com/google/firebase/firebase-analytics-unity/13.9.0/firebase-analytics-unity-13.9.0.pom</file>
+    <file>Assets/GeneratedLocalRepo/Firebase/m2repository/com/google/firebase/firebase-app-unity/13.9.0/firebase-app-unity-13.9.0.aar</file>
+    <file>Assets/GeneratedLocalRepo/Firebase/m2repository/com/google/firebase/firebase-app-unity/13.9.0/firebase-app-unity-13.9.0.pom</file>
+    <file>Assets/GeneratedLocalRepo/Firebase/m2repository/com/google/firebase/firebase-config-unity/13.9.0/firebase-config-unity-13.9.0.aar</file>
+    <file>Assets/GeneratedLocalRepo/Firebase/m2repository/com/google/firebase/firebase-config-unity/13.9.0/firebase-config-unity-13.9.0.pom</file>
+  </files>
+  <settings>
+    <setting name="androidAbis" value="arm64-v8a" />
+    <setting name="bundleId" value="com.ShapeOfVoid.BaseProect" />
+    <setting name="explodeAars" value="True" />
+    <setting name="gradleBuildEnabled" value="True" />
+    <setting name="gradlePropertiesTemplateEnabled" value="True" />
+    <setting name="gradleTemplateEnabled" value="True" />
+    <setting name="installAndroidPackages" value="True" />
+    <setting name="localMavenRepoDir" value="Assets/GeneratedLocalRepo" />
+    <setting name="packageDir" value="Assets/Plugins/Android" />
+    <setting name="patchAndroidManifest" value="True" />
+    <setting name="patchMainTemplateGradle" value="True" />
+    <setting name="projectExportEnabled" value="False" />
+    <setting name="useFullCustomMavenRepoPathWhenExport" value="True" />
+    <setting name="useFullCustomMavenRepoPathWhenNotExport" value="False" />
+    <setting name="useJetifier" value="True" />
+  </settings>
+</dependencies>

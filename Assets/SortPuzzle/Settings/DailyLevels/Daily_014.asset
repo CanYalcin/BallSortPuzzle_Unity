@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e2958b50b933b448b475d5de033f947, type: 3}
+  m_Name: Daily_014
+  m_EditorClassIdentifier: Assembly-CSharp::SortPuzzle.Data.LevelData
+  LevelIndex: 13
+  DisplayName: "Daily Challenge \u2014 Day 14"
+  SceneName: 
+  SoftCurrencyReward: 100
+  HardCurrencyReward: 0
+  DifficultyRating: 8
+  TimeLimit: 0
+  GameSpeedMultiplier: 1
+  WorldIndex: -1
+  TubeCount: 9
+  EmptyTubeCount: 2
+  TubeCapacity: 4
+  ColorCount: 7
+  Tubes:
+  - Balls: 01000000010000000700000000000000
+  - Balls: 02000000010000000700000005000000
+  - Balls: 03000000030000000000000000000000
+  - Balls: 04000000050000000100000002000000
+  - Balls: 05000000060000000400000006000000
+  - Balls: 04000000000000000000000000000000
+  - Balls: 07000000030000000600000006000000
+  - Balls: 02000000040000000500000003000000
+  - Balls: 07000000020000000000000000000000
+  ParMoves: 19
+  ValidatedSolution: f3t8,f7t2,f1t7,f0t1,f3t0,f7t3,f5t7,f4t5,f4t7,f4t5,f3t4,f6t5,f6t2,f1t6,f1t0,f1t8,f7t3,f8t7,f6t8
+  GoldReward: 50
+  ContainsUndoBoost: 0
+  IsDailyLevel: 0
