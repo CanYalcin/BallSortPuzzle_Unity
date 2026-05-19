@@ -2,6 +2,7 @@
 #
 # Get latest from https://github.com/github/gitignore/blob/main/Unity.gitignore
 #
+.utmp/
 /[Ll]ibrary/
 /[Tt]emp/
 /[Oo]bj/
@@ -9,10 +10,15 @@
 /[Bb]uilds/
 /[Ll]ogs/
 /[Uu]ser[Ss]ettings/
-/[Aa]ssets/[Ss]treamingAssets/[Ff]irebase/
-/[Aa]ssets/[Ss]treamingAssets/[Ff]irebase.meta
-/[Aa]ssets/[Ss]treamingAssets/[Gg]oogle-services-desktop.json
-/[Aa]ssets/[Ss]treamingAssets/[Gg]oogle-services-desktop.json.meta
+**/google-services.xml
+**/GoogleService-Info.plist
+**/google-services.json
+**/google-services-desktop.json
+**/google-services.xml.meta
+**/GoogleService-Info.plist.meta
+**/google-services.json.meta
+**/google-services-desktop.json.meta
+*.log
 
 # MemoryCaptures can get excessive in size.
 # They also could contain extremely sensitive data
@@ -63,6 +69,7 @@ sysinfo.txt
 *.apk
 *.aab
 *.unitypackage
+*.unitypackage.meta
 *.app
 
 # Crashlytics generated file
