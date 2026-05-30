@@ -19,7 +19,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-config:23.0.1' // Assets/Firebase/Editor/RemoteConfigDependencies.xml:16
     implementation 'com.google.firebase:firebase-config-unity:13.9.0' // Assets/Firebase/Editor/RemoteConfigDependencies.xml:23
     implementation 'com.google.firebase:firebase-messaging-ktx:22.0.0' // Assets/Push Notifications/Editor/Android/PushSDKDependencies.xml:9
-    implementation 'com.revenuecat.purchases:purchases-hybrid-common:[17.54.0]' // Packages/com.revenuecat.purchases-unity/Plugins/Editor/RevenueCatDependencies.xml:4
+    implementation 'com.revenuecat.purchases:purchases-hybrid-common:[18.8.0]' // Packages/com.revenuecat.purchases-unity/Plugins/Editor/RevenueCatDependencies.xml:4
     implementation 'com.unity3d.ads:unity-ads:4.18.0' // Assets/LevelPlay/Editor/ISUnityAdsAdapterDependencies.xml:9
     implementation 'com.unity3d.ads-mediation:mediation-sdk:9.4.2' // Assets/LevelPlay/Editor/IronSourceSDKDependencies.xml:5
     implementation 'com.unity3d.ads-mediation:unityads-adapter:5.7.0' // Assets/LevelPlay/Editor/ISUnityAdsAdapterDependencies.xml:5

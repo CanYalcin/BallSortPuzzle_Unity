@@ -8,7 +8,7 @@
         "com.unity.nuget.newtonsoft-json": "3.0.2",
         "com.unity.test-framework": "1.1.31"
       },
-      "hash": "73eb27aeccfa8e0676eaf3304136e9b85953d913"
+      "hash": "78ee5418415953b79c358bfe6355fcc3fde7912b"
     },
     "com.google.external-dependency-manager": {
       "version": "https://github.com/googlesamples/unity-jar-resolver.git?path=upm",
@@ -18,7 +18,7 @@
       "hash": "38f31affdc54bf7ed0ffb8b97f3444395912a398"
     },
     "com.revenuecat.purchases-unity": {
-      "version": "8.9.0",
+      "version": "9.1.0",
       "depth": 0,
       "source": "registry",
       "dependencies": {},
