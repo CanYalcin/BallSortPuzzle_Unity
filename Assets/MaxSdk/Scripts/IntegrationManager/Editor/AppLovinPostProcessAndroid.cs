@@ -274,7 +274,7 @@ namespace AppLovinMax.Scripts.IntegrationManager.Editor
                 }
                 else
                 {
-                    MaxSdkLogger.E("Failed to set distribution URL");
+                    MaxSdkLogger.UserError("Failed to set distribution URL");
                 }
             }
 
@@ -284,7 +284,7 @@ namespace AppLovinMax.Scripts.IntegrationManager.Editor
                 // Unity 2022.3+ requires Gradle Plugin version 7.1.2+.
                 if (MaxSdkUtils.CompareVersions(customGradleToolsVersion, "7.1.2") == MaxSdkUtils.VersionComparisonResult.Lesser)
                 {
-                    MaxSdkLogger.E("Failed to set gradle plugin version. Unity 2022.3+ requires gradle plugin version 7.1.2+");
+                    MaxSdkLogger.UserError("Failed to set gradle plugin version. Unity 2022.3+ requires gradle plugin version 7.1.2+");
                     return;
                 }
 
@@ -295,7 +295,7 @@ namespace AppLovinMax.Scripts.IntegrationManager.Editor
                 }
                 else
                 {
-                    MaxSdkLogger.E("Failed to set gradle library version");
+                    MaxSdkLogger.UserError("Failed to set gradle library version");
                 }
 
                 var newGradleVersionLine = AppLovinProcessGradleBuildFile.GetFormattedBuildScriptLine(string.Format("id 'com.android.application' version '{0}' apply false", customGradleToolsVersion));
@@ -308,7 +308,7 @@ namespace AppLovinMax.Scripts.IntegrationManager.Editor
                 }
                 else
                 {
-                    MaxSdkLogger.E("Failed to set gradle plugin version");
+                    MaxSdkLogger.UserError("Failed to set gradle plugin version");
                 }
             }
         }

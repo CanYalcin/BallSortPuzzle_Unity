@@ -224,7 +224,7 @@ namespace AppLovinMax.Scripts.IntegrationManager.Editor
             var pluginData = AppLovinIntegrationManager.LoadPluginDataSync();
             if (pluginData == null)
             {
-                MaxSdkLogger.E("Failed to load plugin data. Dynamic libraries will not be embedded.");
+                MaxSdkLogger.UserError("Failed to load plugin data. Dynamic libraries will not be embedded.");
                 return null;
             }
 

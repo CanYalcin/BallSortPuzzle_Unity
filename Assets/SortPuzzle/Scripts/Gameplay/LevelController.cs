@@ -32,6 +32,7 @@ namespace SortPuzzle.Gameplay
         private BoostSystem      _boostSystem;
         private HyperBase.UI.Screens.GameplayScreen _gameplayScreen;
 
+        [Inject]
 public void Construct(PuzzleController puzzle, LevelManager levelManager,
                               BoostManager boostManager, GoldManager goldManager,
                               BoostSystem boostSystem, EventBus events)
@@ -53,7 +54,7 @@ private void Start()
         {
             if (_levelManager == null)
             {
-                var scope = GetComponentInParent<VContainer.Unity.LifetimeScope>();
+                var scope = Object.FindFirstObjectByType<VContainer.Unity.LifetimeScope>();
                 if (scope != null)
                 {
                     _puzzle       = scope.Container.Resolve<PuzzleController>();

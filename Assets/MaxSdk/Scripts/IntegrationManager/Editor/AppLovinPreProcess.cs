@@ -57,7 +57,7 @@ namespace AppLovinMax.Scripts.IntegrationManager.Editor
             }
             catch (Exception exception)
             {
-                MaxSdkLogger.E("Unable to load Dependencies file due to exception: " + exception.Message);
+                MaxSdkLogger.UserError("Unable to load Dependencies file due to exception: " + exception.Message);
             }
 
             return null;
@@ -173,7 +173,7 @@ namespace AppLovinMax.Scripts.IntegrationManager.Editor
             }
             catch (Exception exception)
             {
-                MaxSdkLogger.E("Unable to save Dependencies file due to exception: " + exception.Message);
+                MaxSdkLogger.UserError("Unable to save Dependencies file due to exception: " + exception.Message);
             }
 
             return false;

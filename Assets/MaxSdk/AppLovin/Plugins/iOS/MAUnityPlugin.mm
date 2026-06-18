@@ -8,7 +8,7 @@
 
 #import "MAUnityAdManager.h"
 
-#define VERSION @"8.6.3"
+#define VERSION @"8.6.4"
 #define NSSTRING(_X) ( (_X != NULL) ? [NSString stringWithCString: _X encoding: NSStringEncodingConversionAllowLossy].al_stringByTrimmingWhitespace : nil)
 
 @interface NSString (ALUtils)

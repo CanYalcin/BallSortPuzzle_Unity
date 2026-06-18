@@ -373,7 +373,7 @@ namespace AppLovinMax.Scripts.IntegrationManager.Editor
         {
             if (!webResponse.IsSuccess)
             {
-                MaxSdkLogger.E("Failed to load plugin data. Please check your internet connection.");
+                MaxSdkLogger.UserError("Failed to load plugin data. Please check your internet connection.");
                 return null;
             }
 
