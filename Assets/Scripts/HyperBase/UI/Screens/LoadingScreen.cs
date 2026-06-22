@@ -4,7 +4,6 @@ using UnityEngine.UI;
 using TMPro;
 using HyperBase.Core;
 using HyperBase.Audio;
-using HyperBase.Currency;
 using VContainer;
 
 namespace HyperBase.UI.Screens
@@ -19,7 +18,7 @@ namespace HyperBase.UI.Screens
         {
             "Complete levels to unlock harder challenges!",
             "Watch ads to double your coin rewards!",
-            "Gems are awarded for perfect completions!"
+            "Use boosts to get unstuck on tricky levels!"
         };
 
         protected override async UniTask HandleLifecycle(LifecycleEvent evt)

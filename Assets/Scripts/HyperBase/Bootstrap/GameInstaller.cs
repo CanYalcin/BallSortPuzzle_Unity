@@ -16,8 +16,8 @@ namespace HyperBase.Bootstrap
     ///   1. Set Parent = BootstrapInstaller in the VContainer header.
     ///   2. Drag all screen GameObjects from the scene Canvas into the slots below.
     ///   3. GameScene only: drag LevelController, GoldCounterWidget, BoostBarWidget.
-    ///   4. MainMenu only: drag DailyChallengeScreen, ShopScreen, WorldMapScreen.
-    ///      Leave those four empty in GameScene/MainMenu respectively.
+    ///   4. MainMenu only: drag DailyChallengeScreen, ShopScreen.
+    ///      Leave those empty in GameScene/MainMenu respectively.
     /// </summary>
     public class GameInstaller : LifetimeScope
     {
@@ -32,7 +32,6 @@ namespace HyperBase.Bootstrap
         [Header("MainMenu-only Screens (leave empty in GameScene)")]
         [SerializeField] private DailyChallengeScreen _dailyChallenge;
         [SerializeField] private ShopScreen           _shop;
-        [SerializeField] private WorldMapScreen       _worldMap;
 
         [Header("GameScene-only (leave empty in MainMenu)")]
         [SerializeField] private LevelController   _levelController;
@@ -56,7 +55,6 @@ namespace HyperBase.Bootstrap
             // Optional MainMenu screens
             if (_dailyChallenge) builder.RegisterComponent(_dailyChallenge);
             if (_shop)           builder.RegisterComponent(_shop);
-            if (_worldMap)       builder.RegisterComponent(_worldMap);
 
             // Optional GameScene MonoBehaviours
             if (_levelController   != null) builder.RegisterComponent(_levelController);

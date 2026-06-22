@@ -1,6 +1,5 @@
 using Cysharp.Threading.Tasks;
 using HyperBase.Audio;
-using HyperBase.Core;
 using HyperBase.Data;
 using HyperBase.Haptics;
 using HyperBase.Monetization;
@@ -16,37 +15,36 @@ namespace HyperBase.UI.Screens
         [SerializeField] private Toggle _soundToggle;
         [SerializeField] private Toggle _musicToggle;
         [SerializeField] private Toggle _hapticsToggle;
-        [SerializeField] private Slider _masterSlider;
-        [SerializeField] private Slider _sfxSlider;
-        [SerializeField] private Slider _musicSlider;
         [SerializeField] private Button _closeBtn;
-        [SerializeField] private Button _homeBtn;
         [SerializeField] private Button _restoreBtn;
+        [SerializeField] private Button _contactUsBtn;
+        [SerializeField] private Button _shareBtn;
+        [SerializeField] private Button _termsOfUseBtn;
+        [SerializeField] private Button _privacyPolicyBtn;
 
         private AudioManager   _audio;
         private HapticsManager _haptics;
         private UIManager      _ui;
         private SaveManager    _save;
-        private GameManager    _game;
-        private IAPManager     _iap;
+                private IAPManager     _iap;
 
         [Inject]
         public void Construct(AudioManager audio, HapticsManager haptics,
-                              UIManager ui, SaveManager save, GameManager game, IAPManager iap)
-        { _audio = audio; _haptics = haptics; _ui = ui; _save = save; _game = game; _iap = iap; }
+                              UIManager ui, SaveManager save, IAPManager iap)
+        { _audio = audio; _haptics = haptics; _ui = ui; _save = save; _iap = iap; }
 
         protected override void Awake()
         {
             base.Awake();
             if (_closeBtn)   _closeBtn.onClick.AddListener(OnClose);
-            if (_homeBtn)    _homeBtn.onClick.AddListener(OnHome);
             if (_restoreBtn) _restoreBtn.onClick.AddListener(OnRestore);
+            if (_contactUsBtn)     _contactUsBtn.onClick.AddListener(OnContactUs);
+            if (_shareBtn)         _shareBtn.onClick.AddListener(OnShare);
+            if (_termsOfUseBtn)    _termsOfUseBtn.onClick.AddListener(OnTermsOfUse);
+            if (_privacyPolicyBtn) _privacyPolicyBtn.onClick.AddListener(OnPrivacyPolicy);
             if (_soundToggle)   _soundToggle.onValueChanged.AddListener(v   => { _audio.SetSoundEnabled(v); _haptics.MediumImpact(); });
             if (_musicToggle)   _musicToggle.onValueChanged.AddListener(v   => _audio.SetMusicEnabled(v));
             if (_hapticsToggle) _hapticsToggle.onValueChanged.AddListener(v => _haptics.SetEnabled(v));
-            if (_masterSlider)  _masterSlider.onValueChanged.AddListener(v  => _audio.SetMasterVolume(v));
-            if (_sfxSlider)     _sfxSlider.onValueChanged.AddListener(v     => _audio.SetSfxVolume(v));
-            if (_musicSlider)   _musicSlider.onValueChanged.AddListener(v   => _audio.SetMusicVolume(v));
         }
 
         protected override async UniTask HandleLifecycle(LifecycleEvent evt)
@@ -57,10 +55,6 @@ namespace HyperBase.UI.Screens
                 if (_soundToggle)   _soundToggle.isOn   = d.SoundEnabled;
                 if (_musicToggle)   _musicToggle.isOn   = d.MusicEnabled;
                 if (_hapticsToggle) _hapticsToggle.isOn = d.HapticsEnabled;
-                if (_masterSlider)  _masterSlider.value = d.MasterVolume;
-                if (_sfxSlider)     _sfxSlider.value    = d.SfxVolume;
-                if (_musicSlider)   _musicSlider.value  = d.MusicVolume;
-                if (_homeBtn)       _homeBtn.gameObject.SetActive(_game.CurrentState == GameState.Paused);
             }
             await UniTask.CompletedTask;
         }
@@ -71,16 +65,7 @@ namespace HyperBase.UI.Screens
         {
             _audio.PlayButtonClick();
             _save.SaveAsync().Forget();
-            if (_game != null && _game.CurrentState == GameState.Paused)
-                _game.Resume();
             _ui.GoBackAsync().Forget();
-        }
-
-        private void OnHome()
-        {
-            _audio.PlayButtonClick();
-            _save.SaveAsync().Forget();
-            _game.TransitionTo(GameState.MainMenu);
         }
 
         private void OnRestore()
@@ -89,6 +74,34 @@ namespace HyperBase.UI.Screens
             // Contacts Apple/Google to restore non-consumable purchases (e.g. No Ads).
             // Required by Apple App Store guidelines for non-consumable IAPs.
             _iap?.RestorePurchasesAsync().Forget();
+        }
+
+        private void OnContactUs()
+        {
+            _audio.PlayButtonClick();
+            // TODO: append UserID / app version / device info before publishing.
+            Application.OpenURL("mailto:drkclltmcy@gmail.com");
+        }
+
+        private void OnShare()
+        {
+            _audio.PlayButtonClick();
+            // TODO: placeholder store link until the game is published.
+            Application.OpenURL("https://play.google.com/store/apps/details?id=com.ShapeOfVoid.BallSortPuzzleUnity");
+        }
+
+        private void OnTermsOfUse()
+        {
+            _audio.PlayButtonClick();
+            // TODO: placeholder — replace with hosted Terms of Use page before publishing.
+            Application.OpenURL("https://github.com/CanYalcin");
+        }
+
+        private void OnPrivacyPolicy()
+        {
+            _audio.PlayButtonClick();
+            // TODO: placeholder — replace with hosted Privacy Policy page before publishing.
+            Application.OpenURL("https://github.com/CanYalcin");
         }
     }
 }

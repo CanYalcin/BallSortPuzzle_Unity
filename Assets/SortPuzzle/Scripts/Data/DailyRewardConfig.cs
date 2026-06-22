@@ -19,10 +19,7 @@ namespace SortPuzzle.Data
         [Tooltip("Undo boosts granted.")]
         public int  UndoBonus;
 
-        [Tooltip("Shuffle Tube boosts granted.")]
-        public int  ShuffleTubeBonus;
-
-        [Tooltip("Extra Empty Tube boosts granted.")]
+[Tooltip("Extra Empty Tube boosts granted.")]
         public int  ExtraEmptyTubeBonus;
 
         [Tooltip("Unlocks a cosmetic skin reward.")]

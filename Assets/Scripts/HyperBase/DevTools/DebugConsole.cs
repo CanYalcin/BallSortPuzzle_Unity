@@ -7,7 +7,6 @@
 
 using System.Collections.Generic;
 using HyperBase.Core;
-using HyperBase.Currency;
 using HyperBase.Data;
 using HyperBase.Gameplay;
 using UnityEngine;
@@ -29,15 +28,13 @@ namespace HyperBase.DevTools
         private const int MaxLogs = 40;
 
         private SaveManager     _save;
-        private CurrencyManager _currency;
         private LevelManager    _levels;
         private GameManager     _game;
 
         [Inject]
-        public void Construct(SaveManager save, CurrencyManager currency,
-                              LevelManager levels, GameManager game)
+        public void Construct(SaveManager save, LevelManager levels, GameManager game)
         {
-            _save = save; _currency = currency; _levels = levels; _game = game;
+            _save = save; _levels = levels; _game = game;
         }
 
         private void OnEnable()  => Application.logMessageReceived += OnLog;
@@ -69,16 +66,11 @@ namespace HyperBase.DevTools
             if (d != null)
             {
                 GUILayout.Label("Level: " + d.CurrentLevelIndex + "  Sessions: " + d.TotalSessionCount);
-                GUILayout.Label("Soft: " + d.SoftCurrency + "   Hard: " + d.HardCurrency);
+                GUILayout.Label("Gold: " + d.GoldBalance);
                 GUILayout.Label("State: " + _game?.CurrentState + "   NoAds: " + d.IsNoAds);
             }
 
             GUILayout.Space(6);
-
-            GUILayout.BeginHorizontal();
-            if (GUILayout.Button("+1000 Soft")) _currency?.Add(CurrencyType.Soft, 1000);
-            if (GUILayout.Button("+100 Hard"))  _currency?.Add(CurrencyType.Hard, 100);
-            GUILayout.EndHorizontal();
 
             GUILayout.BeginHorizontal();
             if (GUILayout.Button("Complete")) _levels?.CompleteCurrentLevel();

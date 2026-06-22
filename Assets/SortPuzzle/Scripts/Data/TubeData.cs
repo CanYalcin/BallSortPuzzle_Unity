@@ -3,9 +3,7 @@ using UnityEngine;
 
 namespace SortPuzzle.Data
 {
-    public enum BoostType { Undo, ExtraEmptyTube }
-
-    /// <summary>
+/// <summary>
     /// Runtime state of a single tube during gameplay.
     /// Pure C# — no MonoBehaviour, no Unity dependencies.
     /// Bottom of tube = index 0. Top = highest filled index.

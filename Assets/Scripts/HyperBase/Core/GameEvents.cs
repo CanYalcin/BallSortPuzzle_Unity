@@ -1,4 +1,3 @@
-using HyperBase.Currency;
 using HyperBase.Monetization;
 
 namespace HyperBase.Core
@@ -31,13 +30,6 @@ namespace HyperBase.Core
     {
         public readonly int LevelIndex;
         public OnLevelFailed(int levelIndex) => LevelIndex = levelIndex;
-    }
-    public readonly struct OnCurrencyChanged
-    {
-        public readonly CurrencyType Type;
-        public readonly int OldAmount;
-        public readonly int NewAmount;
-        public OnCurrencyChanged(CurrencyType type, int oldAmount, int newAmount) { Type = type; OldAmount = oldAmount; NewAmount = newAmount; }
     }
     public readonly struct OnAdShown
     {

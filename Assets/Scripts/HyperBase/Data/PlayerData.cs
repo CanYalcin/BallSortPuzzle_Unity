@@ -18,11 +18,6 @@ namespace HyperBase.Data
         public int CurrentLevelIndex         = 0;
         public int HighestUnlockedLevel      = 0;
         public int TotalLevelsCompleted      = 0;
-
-        // ── HyperBase Currency (unused in SortPuzzle — kept for base compat) ──
-        public int SoftCurrency              = 0;
-        public int HardCurrency              = 0;
-
         // ── SortPuzzle Economy ────────────────────────────────────────────────
         /// <summary>Primary in-game currency. Earned from levels, daily challenge, login, rewarded ads.</summary>
         public int GoldBalance               = 0;

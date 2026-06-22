@@ -31,7 +31,7 @@ namespace HyperBase.Data
             PlayerData fromDisk = ReadFromDisk(SavePath) ?? ReadFromDisk(BackupPath);
             _data               = fromDisk; // may be null; Data property will init lazily
             IsLoaded            = true;
-            Debug.Log($"[SaveManager] Loaded — Level:{Data.CurrentLevelIndex} Soft:{Data.SoftCurrency}");
+            Debug.Log($"[SaveManager] Loaded — Level:{Data.CurrentLevelIndex} Gold:{Data.GoldBalance}");
         }
 
         public void Save()

@@ -22,7 +22,6 @@ namespace HyperBase.UI.Screens
         [Header("Navigation Buttons")]
         [SerializeField] private Button _dailyBtn;
         [SerializeField] private Button _shopBtn;
-        [SerializeField] private Button _worldMapBtn;
 
         [Header("Labels")]
         [SerializeField] private TextMeshProUGUI _levelLabel;
@@ -58,7 +57,6 @@ namespace HyperBase.UI.Screens
             if (_noAdsBtn)    _noAdsBtn.onClick.AddListener(OnNoAds);
             if (_dailyBtn)    _dailyBtn.onClick.AddListener(OnDaily);
             if (_shopBtn)     _shopBtn.onClick.AddListener(OnShop);
-            if (_worldMapBtn) _worldMapBtn.onClick.AddListener(OnWorldMap);
         }
 
         private void Start()
@@ -80,7 +78,7 @@ namespace HyperBase.UI.Screens
                 if (_goldLabel)  _goldLabel.text  = _gold?.Balance.ToString("N0") ?? "0";
 
                 int streak = _daily?.CurrentStreak ?? 0;
-                if (_streakLabel) _streakLabel.text = streak > 0 ? $"🔥 {streak}" : "";
+                if (_streakLabel) _streakLabel.text = streak > 0 ? $"🔥 {streak}" : "0";
 
                 if (_noAdsBtn) _noAdsBtn.gameObject.SetActive(_ads.Config.EnableIAP && !_save.Data.IsNoAds);
                 _events.Subscribe<OnNoAdsActivated>(OnNoAdsActivated);
@@ -102,7 +100,6 @@ namespace HyperBase.UI.Screens
         private void OnNoAds()    { _audio.PlayButtonClick(); _iap.PurchaseAsync(IAPManager.ProductIds.NoAds).Forget(); }
         private void OnDaily()    { _audio.PlayButtonClick(); _ui.ShowScreenAsync<DailyChallengeScreen>().Forget(); }
         private void OnShop()     { _audio.PlayButtonClick(); _ui.ShowScreenAsync<ShopScreen>().Forget(); }
-        private void OnWorldMap() { _audio.PlayButtonClick(); _ui.ShowScreenAsync<WorldMapScreen>().Forget(); }
         private void OnNoAdsActivated(OnNoAdsActivated _) { if (_noAdsBtn) _noAdsBtn.gameObject.SetActive(false); }
     }
 }

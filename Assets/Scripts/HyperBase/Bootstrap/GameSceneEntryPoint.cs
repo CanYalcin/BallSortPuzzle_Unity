@@ -47,7 +47,6 @@ namespace HyperBase.Bootstrap
 
         private DailyChallengeScreen _dailyChallenge;
         private ShopScreen           _shop;
-        private WorldMapScreen       _worldMap;
         private int                  _levelsSinceAd;
         private const int            InterstitialEveryN = 3;
         private System.Action<OnNoAdsActivated> _onNoAds;
@@ -106,10 +105,8 @@ public void Start()
 
             var dc = Object.FindFirstObjectByType<DailyChallengeScreen>(FindObjectsInactive.Include);
             var sh = Object.FindFirstObjectByType<ShopScreen>(FindObjectsInactive.Include);
-            var wm = Object.FindFirstObjectByType<WorldMapScreen>(FindObjectsInactive.Include);
             if (dc) { _dailyChallenge = dc; _ui.RegisterScreen(dc); }
             if (sh) { _shop = sh;           _ui.RegisterScreen(sh); }
-            if (wm) { _worldMap = wm;       _ui.RegisterScreen(wm); }
 
             _onNoAds = _ => _ads.ActivateNoAds();
             _events.Subscribe<OnGameStateChanged>    (OnStateChanged);
@@ -158,17 +155,8 @@ private void OnStateChanged(OnGameStateChanged e)
                     break;
 
                 case GameState.Gameplay:
-                    if (e.Previous == GameState.Paused && currentScene == SceneGame)
-                    {
-                        _ui.ShowScreenAsync<GameplayScreen>().Forget();
-                        break;
-                    }
                     _loader.LoadSceneAsync(SceneGame).Forget();
                     _audio.PlayMusic(_audio.Config?.GameplayMusic);
-                    break;
-
-                case GameState.Paused:
-                    _ui.ShowScreenAsync<SettingsScreen>().Forget();
                     break;
 
                 case GameState.Win:

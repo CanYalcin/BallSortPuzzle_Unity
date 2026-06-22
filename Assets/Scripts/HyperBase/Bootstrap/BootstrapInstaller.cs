@@ -1,7 +1,6 @@
 using HyperBase.Analytics;
 using HyperBase.Audio;
 using HyperBase.Core;
-using HyperBase.Currency;
 using HyperBase.Data;
 using HyperBase.Gameplay;
 using HyperBase.Haptics;
@@ -61,9 +60,6 @@ namespace HyperBase.Bootstrap
 
             // Remote Config
             builder.Register<RemoteConfigManager>(Lifetime.Singleton);
-
-            // HyperBase Currency (kept for base compat)
-            builder.Register<CurrencyManager>(Lifetime.Singleton);
 
             // Audio
             builder.RegisterInstance(_audioConfig);

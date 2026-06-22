@@ -169,20 +169,5 @@ public int Pour(int from, int to)
             return _tubes.Length - 1;
         }
 
-        // ── Boost: Shuffle Tube ───────────────────────────────────────────────
-
-        public void ShuffleTube(int tubeIndex)
-        {
-            if (tubeIndex < 0 || tubeIndex >= TubeCount) return;
-            TubeData t = _tubes[tubeIndex];
-            if (t.IsEmpty || t.IsComplete) return;
-            var rng = new Random();
-            int top = t.TopIndex;
-            for (int i = top; i > 0; i--)
-            {
-                int j = rng.Next(0, i + 1);
-                (t.Balls[i], t.Balls[j]) = (t.Balls[j], t.Balls[i]);
-            }
-        }
     }
 }
