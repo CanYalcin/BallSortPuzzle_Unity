@@ -1,3 +1,5 @@
+[![Unity Tests](https://github.com/CanYalcin/BallSortPuzzle_Unity/actions/workflows/unity-ci.yml/badge.svg)](https://github.com/CanYalcin/BallSortPuzzle_Unity/actions/workflows/unity-ci.yml)
+
 # Water Sort Puzzle
 
 A production-grade hypercasual mobile game built with Unity 6, developed using an AI-assisted workflow. This project demonstrates a complete, commercially-structured game from architecture through economy, monetisation, and content generation — ready for store submission.
