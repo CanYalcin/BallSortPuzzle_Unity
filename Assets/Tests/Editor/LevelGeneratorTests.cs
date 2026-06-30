@@ -131,7 +131,14 @@ namespace BallSort.Tests.EditMode
         // combined with truncated/incomplete XML for the difficulty-10 case, indicates the
         // test process was being killed mid-generation on slow runners, not that the
         // generation logic itself was wrong (it passed 100/100 locally every time).
+        // [Timeout(...)] explicitly raises Unity's default 180000ms (3 min) per-test
+        // budget. Confirmed via the actual editmode-results.xml from a failed CI run:
+        // "Timeout value of 180000 ms was exceeded." — the test wasn't misreported,
+        // it was still inside Generate() when Unity's NUnit runner killed it on a slow
+        // shared runner. 10 minutes gives ample headroom on top of the already-reduced
+        // attempt counts below.
         [Test]
+        [Timeout(600000)]
         [TestCase(8,  20)]
         [TestCase(9,  10)]
         [TestCase(10, 5)]
