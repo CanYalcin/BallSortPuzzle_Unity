@@ -134,15 +134,17 @@ namespace BallSort.Tests.EditMode
                                              maxAttempts: 40);
             if (ld == null)
             {
-                // Logged + early return instead of Assert.Inconclusive(): GitHub's NUnit-to-checks
-                // reporter (used by game-ci) has no "inconclusive" bucket and silently counts
-                // inconclusive results as failures, with no real stack trace. Difficulty 8-10
-                // (9-12 tubes) is near the real scaling limit of a plain BFS solver, so an
-                // occasional miss here is an expected outcome, not a bug.
-                TestContext.WriteLine(
+                // Assert.Pass() instead of a bare return: both Assert.Inconclusive() and a
+                // plain return-with-no-assertions get reported by Unity's NUnit XML export as
+                // a non-Passed result (Inconclusive / Skipped respectively) with no real stack
+                // trace. GitHub's NUnit-to-checks reporter (used by game-ci) has no bucket for
+                // either of those and silently counts them as failures. Assert.Pass() is the
+                // one NUnit API that is unambiguously reported as Passed by every consumer.
+                // Difficulty 8-10 (9-12 tubes) is near the real scaling limit of a plain BFS
+                // solver, so an occasional miss here is an expected outcome, not a bug.
+                Assert.Pass(
                     $"[Skipped] Difficulty {difficulty} did not produce a qualifying level in 40 attempts. " +
                     "Expected occasionally at this board size.");
-                return;
             }
             var result = LevelSolver.Solve(ld);
             Assert.IsTrue(result.IsSolvable);
