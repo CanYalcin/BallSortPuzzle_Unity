@@ -8,6 +8,11 @@ using VContainer;
 
 namespace HyperBase.Gameplay
 {
+    /// <summary>
+    /// Governs level progression: starting, completing, failing, and retrying levels.
+    /// Manages both normal progression (index persisted in PlayerData) and daily challenge mode.
+    /// All state transitions fire through GameManager and EventBus — never mutate GameState directly.
+    /// </summary>
     public class LevelManager
     {
         private readonly LevelDatabase _db;
@@ -41,6 +46,7 @@ namespace HyperBase.Gameplay
             _game         = game;
         }
 
+        /// <summary>Exits daily mode and starts the current normal level. Publishes OnLevelStarted.</summary>
         public void StartCurrentLevel()
         {
             _dailyMode = false;
@@ -51,7 +57,12 @@ namespace HyperBase.Gameplay
             Debug.Log($"[LevelManager] Level started: {_save.Data.CurrentLevelIndex} — {cfg.DisplayName}");
         }
 
-public void CompleteCurrentLevel()
+        /// <summary>
+        /// Completes the current level: awards gold, grants any embedded boosts, advances the level
+        /// index, and transitions to Win state. In daily mode, skips gold/boost grants.
+        /// Publishes OnLevelCompleted (and OnWorldComplete if the last normal level was beaten).
+        /// </summary>
+        public void CompleteCurrentLevel()
         {
             float dur = Time.unscaledTime - _startTime;
             var   cfg = CurrentLevel;
@@ -96,6 +107,7 @@ public void CompleteCurrentLevel()
             _save.SaveAsync().Forget();
         }
 
+        /// <summary>Fails the current level. Publishes OnLevelFailed and transitions to Fail state.</summary>
         public void FailCurrentLevel()
         {
             _events.Publish(new OnLevelFailed(_save.Data.CurrentLevelIndex));
@@ -103,9 +115,15 @@ public void CompleteCurrentLevel()
             _save.SaveAsync().Forget();
         }
 
+        /// <summary>Retries the current level by calling StartCurrentLevel() again.</summary>
         public void RetryCurrentLevel() => StartCurrentLevel();
 
-public void StartDailyChallenge(LevelConfig dailyLevel)
+        /// <summary>
+        /// Enters daily challenge mode with the given level config.
+        /// Publishes OnDailyChallengeStarted and transitions to Gameplay.
+        /// Call ResetDailyMode() on return to normal levels.
+        /// </summary>
+        public void StartDailyChallenge(LevelConfig dailyLevel)
         {
             _dailyMode  = true;
             _dailyLevel = dailyLevel;
@@ -117,8 +135,10 @@ public void StartDailyChallenge(LevelConfig dailyLevel)
             Debug.Log("[LevelManager] Daily challenge started.");
         }
 
+        /// <summary>Exits daily challenge mode and clears the daily level reference.</summary>
         public void ResetDailyMode() { _dailyMode = false; _dailyLevel = null; }
 
+        /// <summary>Debug/editor utility: directly sets CurrentLevelIndex. No events are fired.</summary>
         public void JumpToLevel(int levelIndex)
         {
             if (!_db.IsValid(levelIndex)) { Debug.LogWarning($"[LevelManager] JumpToLevel: index {levelIndex} out of range."); return; }
@@ -127,6 +147,7 @@ public void StartDailyChallenge(LevelConfig dailyLevel)
             _dailyLevel = null;
         }
 
+        /// <summary>Returns true if the given index is within the unlocked level range.</summary>
         public bool IsUnlocked(int index) => _db.IsValid(index) && index <= _save.Data.HighestUnlockedLevel;
     }
 }

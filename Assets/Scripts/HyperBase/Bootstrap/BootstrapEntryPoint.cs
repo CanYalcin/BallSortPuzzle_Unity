@@ -148,7 +148,7 @@ namespace HyperBase.Bootstrap
             // 12. Notifications
             _notifications.Initialize();
             _notifications.CancelAll();
-            _notifications.ScheduleDailyReminder("Your Game");
+            _notifications.ScheduleDailyReminder("Ball Sort Puzzle");
 
             // 13. Navigate to MainMenu
             Application.targetFrameRate = 60;

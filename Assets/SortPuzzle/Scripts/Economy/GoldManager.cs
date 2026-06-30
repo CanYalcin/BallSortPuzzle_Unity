@@ -37,7 +37,7 @@ namespace SortPuzzle.Economy
         }
 
         /// <summary>Adds gold from any source. Source string is for analytics.</summary>
-public void Add(int amount, string source = "unknown")
+        public void Add(int amount, string source = "unknown")
         {
             if (amount <= 0) return;
             int prev = _save.Data.GoldBalance;
@@ -52,7 +52,7 @@ public void Add(int amount, string source = "unknown")
         /// Attempts to spend gold. Returns false and does nothing if insufficient balance.
         /// Sink string is for analytics.
         /// </summary>
-public bool TrySpend(int amount, string sink = "unknown")
+        public bool TrySpend(int amount, string sink = "unknown")
         {
             if (amount <= 0) return false;
             if (_save.Data.GoldBalance < amount)

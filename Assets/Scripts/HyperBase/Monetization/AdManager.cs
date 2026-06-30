@@ -13,7 +13,8 @@ namespace HyperBase.Monetization
     public class AdManager
     {
 
-public AdConfig Config => _config;
+        /// <summary>Exposes the AdConfig asset for read-only access by other systems.</summary>
+        public AdConfig Config => _config;
 
         private readonly AdConfig _config;
         private readonly EventBus _eventBus;
@@ -35,7 +36,11 @@ public AdConfig Config => _config;
 
         // ── Init ─────────────────────────────────────────────────────────────────
 
-public void Initialize()
+        /// <summary>
+        /// Initialises MAX SDK, registers all ad lifecycle callbacks, and loads the first ad units.
+        /// Must be called once after construction (in BootstrapEntryPoint).
+        /// </summary>
+        public void Initialize()
         {
             if (!_config.EnableAds)
             {
@@ -115,7 +120,8 @@ public void Initialize()
 
         // ── Banner ────────────────────────────────────────────────────────────────
 
-public void ShowBanner()
+        /// <summary>Shows the banner, creating it first if needed. No-op if banner/ads disabled or No-Ads active.</summary>
+        public void ShowBanner()
         {
             if (!_config.EnableAds || !_config.EnableBanner || _isNoAds) return;
             if (!_bannerCreated)
@@ -127,12 +133,16 @@ public void ShowBanner()
             MaxSdk.ShowBanner(_config.BannerAdUnitId);
         }
 
-        public void HideBanner()
+        /// <summary>Hides the banner without destroying it. Preserves the loaded ad for quick re-show.</summary>
+        
+public void HideBanner()
         {
             if (_bannerCreated) MaxSdk.HideBanner(_config.BannerAdUnitId);
         }
 
-        public void DestroyBanner()
+        /// <summary>Destroys the banner and releases its resources. ShowBanner() will recreate it.</summary>
+        
+public void DestroyBanner()
         {
             if (!_bannerCreated) return;
             MaxSdk.DestroyBanner(_config.BannerAdUnitId);
@@ -141,7 +151,11 @@ public void ShowBanner()
 
         // ── Interstitial ──────────────────────────────────────────────────────────
 
-public bool CanShowInterstitial()
+        /// <summary>
+        /// Returns true if an interstitial can be shown right now.
+        /// Checks: ads enabled, not No-Ads, ad loaded, min level reached, cooldown elapsed.
+        /// </summary>
+        public bool CanShowInterstitial()
         {
             if (!_config.EnableAds || !_config.EnableInterstitial || _isNoAds)           return false;
             if (!MaxSdk.IsInterstitialReady(_config.InterstitialAdUnitId))               return false;
@@ -150,7 +164,11 @@ public bool CanShowInterstitial()
             return true;
         }
 
-public void TryShowInterstitial(string placement = "default")
+        /// <summary>
+        /// Shows an interstitial if all conditions pass. Resets the cooldown timer on success.
+        /// Publishes <see cref="HyperBase.Core.OnAdShown"/>.
+        /// </summary>
+        public void TryShowInterstitial(string placement = "default")
         {
             if (!_config.EnableAds || !_config.EnableInterstitial || _isNoAds)       return;
             if (!MaxSdk.IsInterstitialReady(_config.InterstitialAdUnitId))            return;
@@ -164,13 +182,19 @@ public void TryShowInterstitial(string placement = "default")
 
         // ── Rewarded ──────────────────────────────────────────────────────────────
 
-public bool IsRewardedReady()
+        /// <summary>Returns true if a rewarded ad is loaded and ready to display.</summary>
+        public bool IsRewardedReady()
         {
             if (!_config.EnableAds || !_config.EnableRewarded) return false;
             return MaxSdk.IsRewardedAdReady(_config.RewardedAdUnitId);
         }
 
-public void ShowRewarded(Action<bool> onComplete, string placement = "default")
+        /// <summary>
+        /// Shows a rewarded ad. Invokes <paramref name="onComplete"/>(true) if the reward is granted,
+        /// or (false) on failure, skip, or if rewarded ads are disabled.
+        /// Only one pending callback is held at a time; a new call overwrites the previous one.
+        /// </summary>
+        public void ShowRewarded(Action<bool> onComplete, string placement = "default")
         {
             if (!_config.EnableAds || !_config.EnableRewarded)
             {
@@ -191,9 +215,13 @@ public void ShowRewarded(Action<bool> onComplete, string placement = "default")
 
         // ── Helpers ───────────────────────────────────────────────────────────────
 
-        public void SetCurrentLevel(int level) => _currentLevel = level;
+        /// <summary>Updates the current level index used for interstitial min-level gating.</summary>
+        
+public void SetCurrentLevel(int level) => _currentLevel = level;
 
-        public void ActivateNoAds()
+        /// <summary>Activates No-Ads mode: hides and destroys the banner, suppresses all future ad calls.</summary>
+        
+public void ActivateNoAds()
         {
             _isNoAds = true;
             if (_bannerCreated) { MaxSdk.DestroyBanner(_config.BannerAdUnitId); _bannerCreated = false; }

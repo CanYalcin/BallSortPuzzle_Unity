@@ -9,12 +9,8 @@ namespace HyperBase.Gameplay
         [Header("Identity")]
         public int    LevelIndex;
         public string DisplayName;
-        public string SceneName;
-
         [Header("Rewards")]
         public int    SoftCurrencyReward = 100;
-        public int    HardCurrencyReward = 0;
-
         [Header("Difficulty")]
         [Range(1, 10)]
         public int    DifficultyRating   = 1;

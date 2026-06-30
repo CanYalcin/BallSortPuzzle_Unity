@@ -33,7 +33,7 @@ namespace SortPuzzle.Gameplay
         private HyperBase.UI.Screens.GameplayScreen _gameplayScreen;
 
         [Inject]
-public void Construct(PuzzleController puzzle, LevelManager levelManager,
+        public void Construct(PuzzleController puzzle, LevelManager levelManager,
                               BoostManager boostManager, GoldManager goldManager,
                               BoostSystem boostSystem, EventBus events)
         {
@@ -50,7 +50,7 @@ public void Construct(PuzzleController puzzle, LevelManager levelManager,
         private bool      _locked;
         private LevelData _ld;
 
-private void Start()
+        private void Start()
         {
             if (_levelManager == null)
             {
@@ -105,7 +105,11 @@ private void Start()
 
         // ── Boost buttons ─────────────────────────────────────────────────────
 
-public void OnUndoPressed()
+        /// <summary>
+        /// Called from BoostBarWidget Undo button. Uses one Undo boost if available;
+        /// otherwise triggers a rewarded ad via BoostSystem.
+        /// </summary>
+        public void OnUndoPressed()
         {
             if (_locked) return;
             if (_boostManager.HasBoost(BoostType.Undo))
@@ -123,9 +127,11 @@ public void OnUndoPressed()
             }
         }
 
-
-
-public void OnExtraEmptyTubePressed()
+        /// <summary>
+        /// Called from BoostBarWidget ExtraEmptyTube button. Adds a new tube if boost available;
+        /// otherwise triggers a rewarded ad via BoostSystem. Repositions all TubeViews to fit.
+        /// </summary>
+        public void OnExtraEmptyTubePressed()
         {
             if (_locked) return;
             if (_boostManager.HasBoost(BoostType.ExtraEmptyTube))
@@ -156,7 +162,8 @@ public void OnExtraEmptyTubePressed()
             }
         }
 
-public void OnRestartPressed()
+        /// <summary>Resets the puzzle to its initial state and refreshes all TubeViews.</summary>
+        public void OnRestartPressed()
         {
             _locked = false;
             _puzzle.Restart();
@@ -190,7 +197,7 @@ public void OnRestartPressed()
             if (!_puzzle.GetTube(idx).IsEmpty) { _sel = idx; t.SetSelected(true); }
         }
 
-private void TapPour(int from, int to)
+        private void TapPour(int from, int to)
         {
             var srcTube  = _puzzle.GetTube(from);
             var destTube = _puzzle.GetTube(to);

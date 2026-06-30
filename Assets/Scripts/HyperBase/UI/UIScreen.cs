@@ -8,9 +8,9 @@ namespace HyperBase.UI
     /// <summary>
     /// Base class for all UI screens. Handles show/hide async transitions via CanvasGroup.
     /// Override HandleLifecycle(evt) in subclasses for per-screen logic.
+    /// </summary>
     [RequireComponent(typeof(CanvasGroup))]
     [RequireComponent(typeof(RectTransform))]
-    [RequireComponent(typeof(CanvasGroup))]
     public abstract class UIScreen : MonoBehaviour
     {
         public enum LifecycleEvent { BeforeShow, AfterShow, BeforeHide, AfterHide }
@@ -38,6 +38,10 @@ namespace HyperBase.UI
         /// <summary>Called on device back button press while this screen is active.</summary>
         public virtual void OnBackPressed() { }
 
+        /// <summary>
+        /// Shows the screen: activates the GameObject, runs BeforeShow lifecycle, fades/scales in,
+        /// then runs AfterShow. Blocks raycasts only after the transition completes.
+        /// </summary>
         public async UniTask ShowAsync()
         {
             gameObject.SetActive(true);
@@ -53,6 +57,10 @@ namespace HyperBase.UI
             await HandleLifecycle(LifecycleEvent.AfterShow);
         }
 
+        /// <summary>
+        /// Hides the screen: blocks input immediately, runs BeforeHide lifecycle, fades/scales out,
+        /// deactivates the GameObject, then runs AfterHide.
+        /// </summary>
         public async UniTask HideAsync()
         {
             CG.interactable   = false;

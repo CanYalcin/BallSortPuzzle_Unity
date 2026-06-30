@@ -94,7 +94,7 @@ namespace HyperBase.Bootstrap
             _settings  = settings;
         }
 
-public void Start()
+        public void Start()
         {
             _ui.RegisterScreen(_mainMenu);
             _ui.RegisterScreen(_gameplay);
@@ -140,7 +140,7 @@ public void Start()
             }
         }
 
-private void OnStateChanged(OnGameStateChanged e)
+        private void OnStateChanged(OnGameStateChanged e)
         {
             string currentScene = SceneManager.GetActiveScene().name;
             switch (e.Current)
@@ -172,7 +172,7 @@ private void OnStateChanged(OnGameStateChanged e)
             }
         }
 
-private void OnPuzzleWon(SortPuzzle.OnPuzzleWon e)
+        private void OnPuzzleWon(SortPuzzle.OnPuzzleWon e)
         {
             bool isDaily          = _levels.IsDailyMode;
             int  goldActuallyAdded = isDaily ? 100 : (_levels.CurrentLevel?.SoftCurrencyReward ?? e.GoldEarned);
@@ -202,14 +202,14 @@ private void OnPuzzleWon(SortPuzzle.OnPuzzleWon e)
                 _ui.ShowScreenAsync<ShopScreen>().Forget();
         }
 
-private void OnWorldComplete(OnWorldComplete e)
+        private void OnWorldComplete(OnWorldComplete e)
         {
             Debug.Log($"[GameSceneEntryPoint] World {e.WorldIndex} complete!");
             _analytics.LogEvent("world_complete",
                 new System.Collections.Generic.Dictionary<string, object> { { "world", e.WorldIndex } });
         }
 
-public void Dispose()
+        public void Dispose()
         {
             _events.Unsubscribe<OnGameStateChanged>    (OnStateChanged);
             _events.Unsubscribe<OnLevelCompleted>      (OnLevelCompleted);
@@ -219,7 +219,7 @@ public void Dispose()
             _events.Unsubscribe<SortPuzzle.OnPuzzleWon>(OnPuzzleWon);
         }
 
-private void OnPurchased(OnPurchaseCompleted e)
+        private void OnPurchased(OnPurchaseCompleted e)
         {
             string id = e.ProductId;
             if (id == IAPManager.ProductIds.NoAds)

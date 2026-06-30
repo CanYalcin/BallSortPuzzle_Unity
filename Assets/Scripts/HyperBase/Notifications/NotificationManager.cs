@@ -31,9 +31,6 @@ namespace HyperBase.Notifications
         public void ScheduleDailyReminder(string gameTitle)
             => ScheduleIn(gameTitle + " misses you!", "Your progress is waiting!", TimeSpan.FromHours(24));
 
-        public void ScheduleEnergyRefill(TimeSpan refillTime, int amount)
-            => ScheduleIn("Energy Refilled!", "Your " + amount + " energy is ready!", refillTime, "hyper_energy");
-
         public void CancelAll()
         {
             if (!_ready) return;

@@ -60,7 +60,6 @@ namespace SortPuzzle.Editor
             ld.LevelIndex    = 1;
             ld.WorldIndex    = 0;
             ld.DisplayName   = "Level 2";
-            ld.SceneName     = "GameScene";
             ld.TubeCount     = 6;
             ld.EmptyTubeCount = 2;
             ld.TubeCapacity  = 4;
@@ -96,7 +95,6 @@ namespace SortPuzzle.Editor
             ld.LevelIndex    = 2;
             ld.WorldIndex    = 0;
             ld.DisplayName   = "Level 3";
-            ld.SceneName     = "GameScene";
             ld.TubeCount     = 8;
             ld.EmptyTubeCount = 2;
             ld.TubeCapacity  = 4;

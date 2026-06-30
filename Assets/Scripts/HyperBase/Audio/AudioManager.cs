@@ -6,15 +6,21 @@ using VContainer;
 
 namespace HyperBase.Audio
 {
+    /// <summary>
+    /// Manages all game audio: SFX pool with auto-grow, dual-source crossfading music,
+    /// and per-channel volume controls. Respects SoundEnabled, MusicEnabled, SfxVolume,
+    /// and MasterVolume from PlayerData.
+    /// Call <see cref="Initialize"/> once on startup before any other method.
+    /// </summary>
     public class AudioManager
     {
-        private readonly AudioConfig _config;
-        private readonly SaveManager _saveManager;
-        private readonly List<AudioSource> _sfxPool = new();
+        private readonly AudioConfig        _config;
+        private readonly SaveManager        _saveManager;
+        private readonly List<AudioSource>  _sfxPool = new();
         private AudioSource _musicA;
         private AudioSource _musicB;
-        private bool _usingA = true;
-        private GameObject _root;
+        private bool        _usingA = true;
+        private GameObject  _root;
 
         public AudioConfig Config => _config;
 
@@ -25,6 +31,10 @@ namespace HyperBase.Audio
             _saveManager = saveManager;
         }
 
+        /// <summary>
+        /// Creates the runtime AudioSource pool and music sources on a DontDestroyOnLoad GameObject.
+        /// Must be called once after construction (in BootstrapEntryPoint) before any audio plays.
+        /// </summary>
         public void Initialize()
         {
             // Single GameObject — all AudioSources added as components directly.
@@ -33,7 +43,7 @@ namespace HyperBase.Audio
 
             for (int i = 0; i < _config.SfxPoolSize; i++)
             {
-                var src        = _root.AddComponent<AudioSource>();
+                var src         = _root.AddComponent<AudioSource>();
                 src.playOnAwake = false;
                 src.loop        = false;
                 _sfxPool.Add(src);
@@ -50,6 +60,11 @@ namespace HyperBase.Audio
             Debug.Log("[AudioManager] Initialized.");
         }
 
+        /// <summary>
+        /// Plays a one-shot SFX clip. Auto-grows the pool if all sources are busy.
+        /// Respects SoundEnabled and SfxVolume. No-op if clip is null or sound is disabled.
+        /// </summary>
+        /// <param name="vol">Per-call volume multiplier applied on top of SfxVolume and MasterVolume.</param>
         public void PlaySfx(AudioClip clip, float vol = 1f)
         {
             if (clip == null || !_saveManager.Data.SoundEnabled) return;
@@ -66,6 +81,7 @@ namespace HyperBase.Audio
             src.Play();
         }
 
+        /// Named SFX shortcuts — each calls PlaySfx with the matching clip from AudioConfig.
         public void PlayButtonClick()   => PlaySfx(_config.ButtonClick);
         public void PlayCoinCollect()   => PlaySfx(_config.CoinCollect);
         public void PlayLevelComplete() => PlaySfx(_config.LevelComplete);
@@ -73,6 +89,10 @@ namespace HyperBase.Audio
         public void PlayPurchase()      => PlaySfx(_config.PurchaseSuccess);
         public void PlayRewardEarned()  => PlaySfx(_config.RewardEarned);
 
+        /// <summary>
+        /// Crossfades to a new music track using dual-AudioSource ping-pong.
+        /// Fade duration is set in AudioConfig. No-op if clip is null.
+        /// </summary>
         public void PlayMusic(AudioClip clip, bool loop = true)
         {
             if (clip == null) return;
@@ -86,15 +106,17 @@ namespace HyperBase.Audio
             _usingA = !_usingA;
         }
 
+        /// <summary>Fades out the currently active music track.</summary>
         public void StopMusic()
         {
             var act = _usingA ? _musicA : _musicB;
             FadeOutAsync(act).Forget();
         }
 
-        public void SetSoundEnabled(bool v)    => _saveManager.Data.SoundEnabled   = v;
-        public void SetHapticsEnabled(bool v)   => _saveManager.Data.HapticsEnabled = v;
-        public void SetSfxVolume(float v)       => _saveManager.Data.SfxVolume      = Mathf.Clamp01(v);
+        /// Volume/toggle setters write directly to PlayerData — caller must call SaveAsync() to persist.
+        public void SetSoundEnabled(bool v)   => _saveManager.Data.SoundEnabled   = v;
+        public void SetHapticsEnabled(bool v)  => _saveManager.Data.HapticsEnabled = v;
+        public void SetSfxVolume(float v)      => _saveManager.Data.SfxVolume      = Mathf.Clamp01(v);
 
         public void SetMusicEnabled(bool v)
         {
@@ -130,10 +152,10 @@ namespace HyperBase.Audio
             float e   = 0f;
             while (e < dur)
             {
-                e           += Time.unscaledDeltaTime;
-                float p      = Mathf.Clamp01(e / dur);
-                from.volume  = Mathf.Lerp(tgt, 0f, p);
-                to.volume    = Mathf.Lerp(0f, tgt, p);
+                e          += Time.unscaledDeltaTime;
+                float p     = Mathf.Clamp01(e / dur);
+                from.volume = Mathf.Lerp(tgt, 0f, p);
+                to.volume   = Mathf.Lerp(0f, tgt, p);
                 await UniTask.Yield();
             }
             from.Stop();

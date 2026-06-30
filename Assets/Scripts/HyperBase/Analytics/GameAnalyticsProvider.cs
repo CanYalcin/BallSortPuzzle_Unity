@@ -16,7 +16,7 @@ namespace HyperBase.Analytics
         public void LogLevelStart(int idx)
             => GameAnalytics.NewProgressionEvent(GAProgressionStatus.Start, $"Level_{idx:000}");
 
-        public void LogLevelComplete(int idx, float dur, int soft)
+        public void LogLevelComplete(int idx, float dur, int gold)
             => GameAnalytics.NewProgressionEvent(GAProgressionStatus.Complete, $"Level_{idx:000}", (int)dur);
 
         public void LogLevelFail(int idx, float dur)

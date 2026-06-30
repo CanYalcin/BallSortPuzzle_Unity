@@ -78,9 +78,9 @@ namespace SortPuzzle.DailyChallenge
             }
         }
 
-        // ── Complete Challenge ────────────────────────────────────────────────
+        // ── Complete Challenge ────────────────────────────────────────
 
-public void CompleteChallenge()
+        public void CompleteChallenge()
         {
             if (CompletedToday) { Debug.LogWarning("[DailyManager] Today already completed."); return; }
 

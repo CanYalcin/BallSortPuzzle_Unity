@@ -8,13 +8,19 @@ namespace HyperBase.VFX
 {
     public enum VFXType
     {
-        None, CoinCollect, CoinExplosion, LevelComplete, LevelFail,
-        ButtonTap, StarBurst, Confetti, HitImpact, WinCelebration
+        None,
+        PourSplash,       // balls landing in destination tube
+        TubeComplete,     // tube fully sorted — glow/burst
+        BoostUsed,        // sparkle on affected tube when a boost is activated
+        LevelComplete,    // triggered on puzzle win
+        LevelFail,        // triggered on fail screen
+        Confetti,         // full-screen burst on win
+        WinCelebration    // extended win effect
     }
 
     /// <summary>
     /// Pooled particle effect manager.
-    /// Usage: _vfx.Play(VFXType.CoinCollect, position);
+    /// Usage: _vfx.Play(VFXType.PourSplash, position);
     /// </summary>
     public class VFXManager
     {

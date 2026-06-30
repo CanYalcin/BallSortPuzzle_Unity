@@ -17,14 +17,14 @@ namespace HyperBase.Analytics
             => FirebaseAnalytics.LogEvent(FirebaseAnalytics.EventLevelStart,
                FirebaseAnalytics.ParameterLevelName, idx.ToString());
 
-        public void LogLevelComplete(int idx, float dur, int soft)
+        public void LogLevelComplete(int idx, float dur, int gold)
             => FirebaseAnalytics.LogEvent(FirebaseAnalytics.EventLevelEnd,
                new Parameter[]
                {
                    new(FirebaseAnalytics.ParameterLevelName, idx.ToString()),
                    new(FirebaseAnalytics.ParameterSuccess,   "true"),
                    new("duration_sec",  (long)dur),
-                   new("soft_earned",   (long)soft)
+                   new("gold_earned",   (long)gold)
                });
 
         public void LogLevelFail(int idx, float dur)

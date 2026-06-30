@@ -25,7 +25,7 @@ namespace HyperBase.Analytics
             Debug.Log($"[Analytics] Registered: {p.GetType().Name}");
         }
 
-public void SubscribeToEvents()
+        public void SubscribeToEvents()
         {
             // Core level events
             _events.Subscribe<OnLevelStarted>    (e => LogLevelStart   (e.LevelIndex));
@@ -64,7 +64,7 @@ public void SubscribeToEvents()
         }
 
         public void LogLevelStart    (int idx)                                    => Fan(p => p.LogLevelStart(idx));
-        public void LogLevelComplete (int idx, float dur, int soft)               => Fan(p => p.LogLevelComplete(idx, dur, soft));
+        public void LogLevelComplete (int idx, float dur, int gold)               => Fan(p => p.LogLevelComplete(idx, dur, gold));
         public void LogLevelFail     (int idx, float dur)                         => Fan(p => p.LogLevelFail(idx, dur));
         public void LogAdShown       (string t, string pl)                        => Fan(p => p.LogAdShown(t, pl));
         public void LogAdCompleted   (string t, string pl, bool r)                => Fan(p => p.LogAdCompleted(t, pl, r));

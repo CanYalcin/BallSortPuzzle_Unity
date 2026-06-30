@@ -20,7 +20,7 @@ namespace HyperBase.RemoteConfig
             { RCKeys.InterstitialCooldownSec, 30   },
             { RCKeys.InterstitialMinLevel,    3    },
             { RCKeys.RewardedMultiplier,      2    },
-            { RCKeys.StartingSoftCurrency,    100  },
+            { RCKeys.StartingGoldBalance,      100  },
             { RCKeys.BannerEnabled,           true },
         };
 
@@ -48,7 +48,7 @@ namespace HyperBase.RemoteConfig
         public const string InterstitialCooldownSec = "interstitial_cooldown_sec";
         public const string InterstitialMinLevel    = "interstitial_min_level";
         public const string RewardedMultiplier      = "rewarded_multiplier";
-        public const string StartingSoftCurrency    = "starting_soft_currency";
+        public const string StartingGoldBalance      = "starting_gold_balance";
         public const string BannerEnabled           = "banner_enabled";
     }
 }
