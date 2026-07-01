@@ -63,7 +63,7 @@ namespace BallSort.Tests.EditMode
         [Test]
         public void Solve_GeneratedDifficulty1Level_IsSolvableWithMinPar()
         {
-            var ld = LevelGenerator.Generate(difficulty: 1, worldIndex: 0, levelIndex: 0);
+            var ld = LevelGenerator.Generate(difficulty: 1, levelIndex: 0);
             Assert.IsNotNull(ld);
             var result = LevelSolver.Solve(ld);
             Assert.IsTrue(result.IsSolvable);
@@ -73,7 +73,7 @@ namespace BallSort.Tests.EditMode
         [Test]
         public void Solve_SolutionPathLengthMatchesPar()
         {
-            var ld = LevelGenerator.Generate(difficulty: 2, worldIndex: 0, levelIndex: 0);
+            var ld = LevelGenerator.Generate(difficulty: 2, levelIndex: 0);
             Assert.IsNotNull(ld);
             var result = LevelSolver.Solve(ld);
             Assert.IsTrue(result.IsSolvable);
@@ -116,7 +116,7 @@ namespace BallSort.Tests.EditMode
         public void Solve_GeneratedLevelParMatchesStoredPar()
         {
             // Re-running the solver should reproduce exactly the par stored at generation time
-            var ld = LevelGenerator.Generate(difficulty: 3, worldIndex: 0, levelIndex: 0);
+            var ld = LevelGenerator.Generate(difficulty: 3, levelIndex: 0);
             Assert.IsNotNull(ld);
             var result = LevelSolver.Solve(ld);
             Assert.IsTrue(result.IsSolvable);

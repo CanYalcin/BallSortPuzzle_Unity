@@ -44,7 +44,7 @@ namespace SortPuzzle.Generation
             _  => new DiffConfig { ColorCount = 10, EmptyTubes = 2, MinPar = 28, Scrambles = 300 },
         };
 
-        public static LevelData Generate(int difficulty, int worldIndex, int levelIndex,
+        public static LevelData Generate(int difficulty, int levelIndex,
                                          int capacity = 4, int maxAttempts = 100)
         {
             int clampedDiff = Mathf.Clamp(difficulty, 1, 10);
@@ -55,9 +55,7 @@ namespace SortPuzzle.Generation
                 TubeData[] tubes = BuildSolvedState(cfg.ColorCount, cfg.EmptyTubes, capacity);
                 Scramble(tubes, cfg.Scrambles, capacity);
 
-                var levelData = ScriptableObject.CreateInstance<LevelData>();
-                levelData.WorldIndex       = worldIndex;
-                levelData.LevelIndex       = levelIndex;
+                var levelData = ScriptableObject.CreateInstance<LevelData>();                levelData.LevelIndex       = levelIndex;
                 levelData.DisplayName      = $"Level {levelIndex + 1}";
                 levelData.TubeCount        = tubes.Length;
                 levelData.EmptyTubeCount   = cfg.EmptyTubes;

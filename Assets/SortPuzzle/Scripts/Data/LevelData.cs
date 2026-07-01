@@ -39,9 +39,6 @@ namespace SortPuzzle.Data
     [CreateAssetMenu(fileName = "LevelData", menuName = "SortPuzzle/Level Data")]
     public class LevelData : LevelConfig
     {
-        [Header("World")]
-        public int WorldIndex;
-
         [Header("Tube Configuration")]
         public int TubeCount      = 6;
         public int EmptyTubeCount = 2;

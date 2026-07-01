@@ -49,7 +49,8 @@ namespace HyperBase.Bootstrap
         private ShopScreen           _shop;
         private int                  _levelsSinceAd;
         private const int            InterstitialEveryN = 3;
-        private System.Action<OnNoAdsActivated> _onNoAds;
+                private int _lastGoldEarned; // cached from OnPuzzleWon; consumed by OnLevelCompleted's analytics call
+private System.Action<OnNoAdsActivated> _onNoAds;
 
         [Inject]
         public GameSceneEntryPoint(
@@ -110,9 +111,7 @@ namespace HyperBase.Bootstrap
 
             _onNoAds = _ => _ads.ActivateNoAds();
             _events.Subscribe<OnGameStateChanged>    (OnStateChanged);
-            _events.Subscribe<OnLevelCompleted>      (OnLevelCompleted);
-            _events.Subscribe<OnWorldComplete>       (OnWorldComplete);
-            _events.Subscribe<OnNoAdsActivated>      (_onNoAds);
+            _events.Subscribe<OnLevelCompleted>      (OnLevelCompleted);            _events.Subscribe<OnNoAdsActivated>      (_onNoAds);
             _events.Subscribe<OnPurchaseCompleted>   (OnPurchased);
             _events.Subscribe<SortPuzzle.OnPuzzleWon>(OnPuzzleWon);
 
@@ -159,9 +158,7 @@ namespace HyperBase.Bootstrap
                     _audio.PlayMusic(_audio.Config?.GameplayMusic);
                     break;
 
-                case GameState.Win:
-                    _win.SetReward(_levels.CurrentLevel?.SoftCurrencyReward ?? 0);
-                    _ui.ShowScreenAsync<WinScreen>().Forget();
+                case GameState.Win:                    _ui.ShowScreenAsync<WinScreen>().Forget();
                     _audio.PlayMusic(_audio.Config?.WinMusic);
                     _rateUs.TryPromptAsync().Forget();
                     break;
@@ -172,10 +169,11 @@ namespace HyperBase.Bootstrap
             }
         }
 
-        private void OnPuzzleWon(SortPuzzle.OnPuzzleWon e)
+private void OnPuzzleWon(SortPuzzle.OnPuzzleWon e)
         {
-            bool isDaily          = _levels.IsDailyMode;
-            int  goldActuallyAdded = isDaily ? 100 : (_levels.CurrentLevel?.SoftCurrencyReward ?? e.GoldEarned);
+            bool isDaily           = _levels.IsDailyMode;
+            int  goldActuallyAdded = isDaily ? 100 : e.GoldEarned; // e.GoldEarned is LevelData.GoldReward, computed once in PuzzleController.Pour()
+            _lastGoldEarned        = goldActuallyAdded;
             _win.SetWinData(goldActuallyAdded, isDaily);
         }
 
@@ -195,26 +193,18 @@ namespace HyperBase.Bootstrap
                 _levelsSinceAd = 0;
             }
             _ads.SetCurrentLevel(_levels.CurrentIndex);
-            _analytics.LogLevelComplete(e.LevelIndex, e.CompletionTime,
-                                        _levels.CurrentLevel?.SoftCurrencyReward ?? 0);
+            _analytics.LogLevelComplete(e.LevelIndex, e.CompletionTime, _lastGoldEarned);
 
             if (e.LevelIndex == 2 && !_save.Data.StarterPackPurchased && _shop != null)
                 _ui.ShowScreenAsync<ShopScreen>().Forget();
         }
 
-        private void OnWorldComplete(OnWorldComplete e)
-        {
-            Debug.Log($"[GameSceneEntryPoint] World {e.WorldIndex} complete!");
-            _analytics.LogEvent("world_complete",
-                new System.Collections.Generic.Dictionary<string, object> { { "world", e.WorldIndex } });
-        }
+
 
         public void Dispose()
         {
             _events.Unsubscribe<OnGameStateChanged>    (OnStateChanged);
-            _events.Unsubscribe<OnLevelCompleted>      (OnLevelCompleted);
-            _events.Unsubscribe<OnWorldComplete>       (OnWorldComplete);
-            _events.Unsubscribe<OnNoAdsActivated>      (_onNoAds);
+            _events.Unsubscribe<OnLevelCompleted>      (OnLevelCompleted);            _events.Unsubscribe<OnNoAdsActivated>      (_onNoAds);
             _events.Unsubscribe<OnPurchaseCompleted>   (OnPurchased);
             _events.Unsubscribe<SortPuzzle.OnPuzzleWon>(OnPuzzleWon);
         }

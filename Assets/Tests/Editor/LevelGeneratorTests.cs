@@ -24,7 +24,7 @@ namespace BallSort.Tests.EditMode
         [Test]
         public void Generate_ReturnsNonNull([Range(1, 7)] int difficulty)
         {
-            var ld = LevelGenerator.Generate(difficulty, worldIndex: 0, levelIndex: 0);
+            var ld = LevelGenerator.Generate(difficulty, levelIndex: 0);
             Assert.IsNotNull(ld,
                 $"Generate() returned null for difficulty {difficulty} — " +
                 "could not meet minPar within maxAttempts.");
@@ -33,7 +33,7 @@ namespace BallSort.Tests.EditMode
         [Test]
         public void Generate_ProducedLevelIsSolvable([Range(1, 7)] int difficulty)
         {
-            var ld = LevelGenerator.Generate(difficulty, worldIndex: 0, levelIndex: 0);
+            var ld = LevelGenerator.Generate(difficulty, levelIndex: 0);
             Assert.IsNotNull(ld);
             var result = LevelSolver.Solve(ld);
             Assert.IsTrue(result.IsSolvable,
@@ -43,7 +43,7 @@ namespace BallSort.Tests.EditMode
         [Test]
         public void Generate_ParMeetsDifficultyMinimum([Range(1, 7)] int difficulty)
         {
-            var ld = LevelGenerator.Generate(difficulty, worldIndex: 0, levelIndex: 0);
+            var ld = LevelGenerator.Generate(difficulty, levelIndex: 0);
             Assert.IsNotNull(ld);
             Assert.GreaterOrEqual(ld.ParMoves, MinPar[difficulty],
                 $"Stored ParMoves {ld.ParMoves} is below minPar {MinPar[difficulty]} " +
@@ -54,7 +54,7 @@ namespace BallSort.Tests.EditMode
         public void Generate_SolverParMatchesStoredPar([Range(1, 7)] int difficulty)
         {
             // Re-running the solver should reproduce the same par stored at generation time
-            var ld = LevelGenerator.Generate(difficulty, worldIndex: 0, levelIndex: 0);
+            var ld = LevelGenerator.Generate(difficulty, levelIndex: 0);
             Assert.IsNotNull(ld);
             var result = LevelSolver.Solve(ld);
             Assert.AreEqual(ld.ParMoves, result.ParMoves,
@@ -65,7 +65,7 @@ namespace BallSort.Tests.EditMode
         [Test]
         public void Generate_SolutionPathLengthMatchesPar([Range(1, 7)] int difficulty)
         {
-            var ld = LevelGenerator.Generate(difficulty, worldIndex: 0, levelIndex: 0);
+            var ld = LevelGenerator.Generate(difficulty, levelIndex: 0);
             Assert.IsNotNull(ld);
             Assert.IsNotEmpty(ld.ValidatedSolution,
                 "ValidatedSolution must be stored on the generated level.");
@@ -79,7 +79,7 @@ namespace BallSort.Tests.EditMode
         [Test]
         public void Generate_TubeCountEqualsColorsAndEmpties([Range(1, 5)] int difficulty)
         {
-            var ld = LevelGenerator.Generate(difficulty, worldIndex: 0, levelIndex: 0);
+            var ld = LevelGenerator.Generate(difficulty, levelIndex: 0);
             Assert.IsNotNull(ld);
             Assert.AreEqual(ld.ColorCount + ld.EmptyTubeCount, ld.TubeCount,
                 "TubeCount must equal ColorCount + EmptyTubeCount.");
@@ -88,7 +88,7 @@ namespace BallSort.Tests.EditMode
         [Test]
         public void Generate_DefaultCapacityIsFour([Range(1, 5)] int difficulty)
         {
-            var ld = LevelGenerator.Generate(difficulty, worldIndex: 0, levelIndex: 0);
+            var ld = LevelGenerator.Generate(difficulty, levelIndex: 0);
             Assert.IsNotNull(ld);
             Assert.AreEqual(4, ld.TubeCapacity);
         }
@@ -97,11 +97,9 @@ namespace BallSort.Tests.EditMode
         public void Generate_MetadataIsStoredCorrectly()
         {
             const int difficulty = 3;
-            const int worldIdx   = 0;
             const int levelIdx   = 7;
-            var ld = LevelGenerator.Generate(difficulty, worldIdx, levelIdx);
+            var ld = LevelGenerator.Generate(difficulty, levelIdx);
             Assert.IsNotNull(ld);
-            Assert.AreEqual(worldIdx,   ld.WorldIndex);
             Assert.AreEqual(levelIdx,   ld.LevelIndex);
             Assert.AreEqual(difficulty, ld.DifficultyRating);
         }
@@ -113,8 +111,8 @@ namespace BallSort.Tests.EditMode
         {
             // The generator is time-seeded, so two calls should statistically
             // produce different solution paths. False failure probability is negligible.
-            var ld1 = LevelGenerator.Generate(3, 0, 0);
-            var ld2 = LevelGenerator.Generate(3, 0, 0);
+            var ld1 = LevelGenerator.Generate(3, 0);
+            var ld2 = LevelGenerator.Generate(3, 0);
             Assert.IsNotNull(ld1);
             Assert.IsNotNull(ld2);
             Assert.AreNotEqual(ld1.ValidatedSolution, ld2.ValidatedSolution,
@@ -144,7 +142,7 @@ namespace BallSort.Tests.EditMode
         [TestCase(10, 5)]
         public void Generate_HighDifficulty_IsSolvableWhenNotNull(int difficulty, int maxAttempts)
         {
-            var ld = LevelGenerator.Generate(difficulty, worldIndex: 0, levelIndex: 0,
+            var ld = LevelGenerator.Generate(difficulty, levelIndex: 0,
                                              maxAttempts: maxAttempts);
             if (ld == null)
             {

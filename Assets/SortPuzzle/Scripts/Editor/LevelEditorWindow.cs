@@ -133,7 +133,7 @@ namespace SortPuzzle.Editor
             if (GUILayout.Button("Validate (Run Solver)", GUILayout.Height(26)))
             {
                 var vt = CreateInstance<LevelData>();
-                vt.WorldIndex=_worldIndex; vt.LevelIndex=_levelIndex;
+                vt.LevelIndex=_levelIndex;
                 vt.TubeCount=_tubeCount; vt.EmptyTubeCount=_emptyTubes;
                 vt.TubeCapacity=_capacity; vt.ColorCount=_colorCount;
                 vt.GoldReward=_goldReward; vt.DifficultyRating=_difficulty;
@@ -198,7 +198,7 @@ namespace SortPuzzle.Editor
             {
                 if (!Directory.Exists(_folder)) Directory.CreateDirectory(_folder);
                 var ld = CreateInstance<LevelData>();
-                ld.WorldIndex=_worldIndex; ld.LevelIndex=_levelIndex;
+                ld.LevelIndex=_levelIndex;
                 ld.TubeCount=_tubeCount; ld.EmptyTubeCount=_emptyTubes;
                 ld.TubeCapacity=_capacity; ld.ColorCount=_colorCount;
                 ld.GoldReward=_goldReward; ld.DifficultyRating=_difficulty;

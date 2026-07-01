@@ -7,12 +7,14 @@ namespace BallSort.Tests.Editor
 {
     /// <summary>
     /// One-time setup utility. Run via BallSort > Setup > Create Test Assembly Definition
-    /// to generate the .asmdef that registers Assets/Tests/EditMode as a proper Unity
-    /// EditMode test assembly. Safe to run multiple times — overwrites the existing file.
+    /// to generate the .asmdef that registers Assets/Tests/Editor (where the actual test
+    /// scripts live) as a proper isolated Unity EditMode test assembly, referencing
+    /// Assembly-CSharp so it can see HyperBase/SortPuzzle runtime types.
+    /// Safe to run multiple times — overwrites the existing file.
     /// </summary>
     public static class TestAssemblySetup
     {
-        private const string AsmdefPath    = "Assets/Tests/EditMode/BallSort.Tests.EditMode.asmdef";
+        private const string AsmdefPath    = "Assets/Tests/Editor/BallSort.Tests.EditMode.asmdef";
         private const string AsmdefContent =
 @"{
     ""name"": ""BallSort.Tests.EditMode"",
@@ -44,9 +46,7 @@ namespace BallSort.Tests.Editor
             File.WriteAllText(AsmdefPath, AsmdefContent);
             AssetDatabase.ImportAsset(AsmdefPath, ImportAssetOptions.ForceUpdate);
             AssetDatabase.Refresh();
-            Debug.Log($"[TestSetup] Assembly definition written to {AsmdefPath}");
-            EditorUtility.DisplayDialog("Test Setup", "Assembly definition created.\n" +
-                "Unity will recompile. Open the Test Runner window to run the tests.", "OK");
+            Debug.Log($"[TestSetup] Assembly definition written to {AsmdefPath}. Unity will recompile.");
         }
     }
 }

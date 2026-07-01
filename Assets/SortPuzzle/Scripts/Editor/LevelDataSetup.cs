@@ -58,17 +58,13 @@ namespace SortPuzzle.Editor
                 AssetDatabase.CreateAsset(ld, path);
             }
             ld.LevelIndex    = 1;
-            ld.WorldIndex    = 0;
-            ld.DisplayName   = "Level 2";
             ld.TubeCount     = 6;
             ld.EmptyTubeCount = 2;
             ld.TubeCapacity  = 4;
             ld.ColorCount    = 4;
             ld.ParMoves      = 12;
             ld.GoldReward    = 20;
-            ld.DifficultyRating = 3;
-            ld.SoftCurrencyReward = 20;
-            // Layout: 4 colors mixed across 4 tubes, 2 empty
+            ld.DifficultyRating = 3;            // Layout: 4 colors mixed across 4 tubes, 2 empty
             // Color 1=Red, 2=Blue, 3=Green, 4=Yellow
             ld.Tubes = new TubeRow[6];
             ld.Tubes[0] = new TubeRow(new int[] { 1, 2, 3, 4 });
@@ -93,7 +89,6 @@ namespace SortPuzzle.Editor
                 AssetDatabase.CreateAsset(ld, path);
             }
             ld.LevelIndex    = 2;
-            ld.WorldIndex    = 0;
             ld.DisplayName   = "Level 3";
             ld.TubeCount     = 8;
             ld.EmptyTubeCount = 2;
@@ -101,9 +96,7 @@ namespace SortPuzzle.Editor
             ld.ColorCount    = 6;
             ld.ParMoves      = 22;
             ld.GoldReward    = 40;
-            ld.DifficultyRating = 7;
-            ld.SoftCurrencyReward = 40;
-            // Layout: 6 colors across 6 tubes, 2 empty — tightly packed
+            ld.DifficultyRating = 7;            // Layout: 6 colors across 6 tubes, 2 empty — tightly packed
             // 1=Red 2=Blue 3=Green 4=Yellow 5=Purple 6=Orange
             ld.Tubes = new TubeRow[8];
             ld.Tubes[0] = new TubeRow(new int[] { 1, 2, 3, 4 });

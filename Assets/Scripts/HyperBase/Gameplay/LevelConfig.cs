@@ -7,11 +7,10 @@ namespace HyperBase.Gameplay
     public class LevelConfig : ScriptableObject
     {
         [Header("Identity")]
+
+
         public int    LevelIndex;
-        public string DisplayName;
-        [Header("Rewards")]
-        public int    SoftCurrencyReward = 100;
-        [Header("Difficulty")]
+        public string DisplayName;        [Header("Difficulty")]
         [Range(1, 10)]
         public int    DifficultyRating   = 1;
         public float  TimeLimit          = 0f;

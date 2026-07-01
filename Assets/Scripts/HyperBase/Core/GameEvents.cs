@@ -33,14 +33,6 @@ namespace HyperBase.Core
         public readonly int LevelIndex;
         public OnLevelFailed(int levelIndex) => LevelIndex = levelIndex;
     }
-
-    /// <summary>Fired by LevelManager when the last level in a world is completed. Reserved for future multi-world support.</summary>
-    public readonly struct OnWorldComplete
-    {
-        public readonly int WorldIndex;
-        public OnWorldComplete(int worldIndex) => WorldIndex = worldIndex;
-    }
-
     /// <summary>Fired by AdManager when any ad impression is recorded. Carries the ad type and placement string.</summary>
     public readonly struct OnAdShown
     {

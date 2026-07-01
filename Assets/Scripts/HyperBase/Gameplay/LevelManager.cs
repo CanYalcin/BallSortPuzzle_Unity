@@ -60,9 +60,9 @@ namespace HyperBase.Gameplay
         /// <summary>
         /// Completes the current level: awards gold, grants any embedded boosts, advances the level
         /// index, and transitions to Win state. In daily mode, skips gold/boost grants.
-        /// Publishes OnLevelCompleted (and OnWorldComplete if the last normal level was beaten).
+        /// Publishes OnLevelCompleted.
         /// </summary>
-        public void CompleteCurrentLevel()
+public void CompleteCurrentLevel()
         {
             float dur = Time.unscaledTime - _startTime;
             var   cfg = CurrentLevel;
@@ -77,9 +77,12 @@ namespace HyperBase.Gameplay
                 return;
             }
 
-            _gold.Add(cfg.SoftCurrencyReward, "level_complete");
-
             var ld = cfg as SortPuzzle.Data.LevelData;
+            if (ld == null)
+                Debug.LogWarning($"[LevelManager] CurrentLevel (index {d.CurrentLevelIndex}) is not a LevelData — no gold awarded.");
+
+            _gold.Add(ld != null ? ld.GoldReward : 0, "level_complete");
+
             if (ld != null && ld.ContainsUndoBoost)
             {
                 _boostManager.Grant(SortPuzzle.Data.BoostType.Undo, 1);
@@ -102,7 +105,6 @@ namespace HyperBase.Gameplay
             }
 
             _events.Publish(new OnLevelCompleted(completedIdx, dur, false));
-            if (wasLast) _events.Publish(new OnWorldComplete(0));
             _game.TransitionTo(GameState.Win);
             _save.SaveAsync().Forget();
         }

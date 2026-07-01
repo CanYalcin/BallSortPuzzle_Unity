@@ -134,7 +134,7 @@ namespace SortPuzzle.Gameplay
                 {
                     _solved = true;
                     int gold = _level?.GoldReward ?? 20;
-                    _events.Publish(new SortPuzzle.OnPuzzleWon(_level?.LevelIndex ?? 0, _level?.WorldIndex ?? 0, gold));
+                    _events.Publish(new SortPuzzle.OnPuzzleWon(_level?.LevelIndex ?? 0, gold));
                     OnWon?.Invoke(0, 0, 0);
                 }
             }

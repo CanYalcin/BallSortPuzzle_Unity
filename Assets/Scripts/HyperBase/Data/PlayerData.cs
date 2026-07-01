@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 
 namespace HyperBase.Data
 {
@@ -45,14 +44,6 @@ namespace HyperBase.Data
 
         /// <summary>Tracks which of the 30 cycle days have been completed (for calendar display).</summary>
         public bool[] DailyCompletedFlags    = new bool[30];
-
-        // ── World Progression ─────────────────────────────────────────────────
-        /// <summary>Highest world index unlocked (0 = World1 only, 1 = World2, 2 = World3).</summary>
-        public int HighestWorldUnlocked      = 0;
-
-        /// <summary>Stars earned per level per world. Key = "worldIndex_levelIndex".</summary>
-        public SerializableDictionary<string, int> LevelStars = new();
-
         // ── Monetisation ─────────────────────────────────────────────────────
         public bool IsNoAds                  = false;
         public bool StarterPackPurchased     = false;
@@ -80,53 +71,5 @@ namespace HyperBase.Data
         public string LastDailyResetDate     = "";
         public int    DailyRewardedAdsWatched = 0;  // cap: 5 per day
         public bool   DailyLoginBonusClaimed = false;
-
-        // ── Helpers ───────────────────────────────────────────────────────────
-        /// <summary>Returns the stars earned for a specific level (0 if not played).</summary>
-        public int GetLevelStars(int worldIndex, int levelIndex)
-        {
-            string key = worldIndex + "_" + levelIndex;
-            return LevelStars.TryGetValue(key, out int stars) ? stars : 0;
-        }
-
-        /// <summary>Sets stars for a level, only if higher than existing value.</summary>
-        public void SetLevelStars(int worldIndex, int levelIndex, int stars)
-        {
-            string key = worldIndex + "_" + levelIndex;
-            if (!LevelStars.ContainsKey(key) || LevelStars[key] < stars)
-                LevelStars[key] = stars;
-        }
-    }
-
-    /// <summary>
-    /// JSON-serialisable dictionary wrapper.
-    /// Unity's JsonUtility does not support Dictionary — use this instead.
-    /// </summary>
-    [Serializable]
-    public class SerializableDictionary<TKey, TValue>
-    {
-        public List<TKey>   Keys   = new();
-        public List<TValue> Values = new();
-
-        public bool TryGetValue(TKey key, out TValue value)
-        {
-            int idx = Keys.IndexOf(key);
-            if (idx < 0) { value = default; return false; }
-            value = Values[idx];
-            return true;
-        }
-
-        public bool ContainsKey(TKey key) => Keys.Contains(key);
-
-        public TValue this[TKey key]
-        {
-            get { int idx = Keys.IndexOf(key); return idx >= 0 ? Values[idx] : default; }
-            set
-            {
-                int idx = Keys.IndexOf(key);
-                if (idx >= 0) Values[idx] = value;
-                else { Keys.Add(key); Values.Add(value); }
-            }
-        }
     }
 }

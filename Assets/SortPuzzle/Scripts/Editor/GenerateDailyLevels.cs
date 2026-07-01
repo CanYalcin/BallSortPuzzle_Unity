@@ -70,10 +70,8 @@ namespace SortPuzzle.DevTools
                     }
                 }
 
-                // Generate new level — use worldIndex=-1 to mark as daily
                 LevelData ld = LevelGenerator.Generate(
                     difficulty:   Difficulty,
-                    worldIndex:   -1,
                     levelIndex:   i,
                     maxAttempts:  MaxAttempts);
 

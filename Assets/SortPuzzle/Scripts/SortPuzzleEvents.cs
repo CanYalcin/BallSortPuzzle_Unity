@@ -8,10 +8,9 @@ namespace SortPuzzle
     public readonly struct OnPuzzleWon
     {
         public readonly int LevelIndex;
-        public readonly int WorldIndex;
         public readonly int GoldEarned;
-        public OnPuzzleWon(int levelIndex, int worldIndex, int goldEarned)
-        { LevelIndex = levelIndex; WorldIndex = worldIndex; GoldEarned = goldEarned; }
+        public OnPuzzleWon(int levelIndex, int goldEarned)
+        { LevelIndex = levelIndex; GoldEarned = goldEarned; }
     }
 
     /// <summary>Fired by PuzzleController after each successful pour. Carries source, destination, ball count and color.</summary>

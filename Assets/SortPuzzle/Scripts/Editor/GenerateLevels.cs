@@ -63,7 +63,7 @@ namespace SortPuzzle.DevTools
 
                 // Generate new level for this slot
                 int diff = DifficultyFor(i);
-                LevelData ld = LevelGenerator.Generate(difficulty: diff, worldIndex: 0, levelIndex: i);
+                LevelData ld = LevelGenerator.Generate(difficulty: diff, levelIndex: i);
 
                 if (ld == null)
                 {
