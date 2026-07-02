@@ -14,13 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SortPuzzle.Data.LevelData
   LevelIndex: 17
   DisplayName: Level 18
-  SceneName: 
-  SoftCurrencyReward: 30
-  HardCurrencyReward: 0
   DifficultyRating: 5
   TimeLimit: 0
   GameSpeedMultiplier: 1
-  WorldIndex: 0
   TubeCount: 7
   EmptyTubeCount: 2
   TubeCapacity: 4
@@ -35,7 +31,7 @@ MonoBehaviour:
   - Balls: 04000000050000000500000000000000
   ParMoves: 13
   ValidatedSolution: f0t2,f0t1,f3t6,f4t1,f3t4,f0t3,f2t0,f5t4,f5t0,f5t1,f4t5,f6t2,f3t6
-  GoldReward: 25
-  ContainsUndoBoost: 1
-  ContainsShuffleBoost: 1
+  GoldReward: 75
+  ContainsUndoBoost: 0
+  ContainsExtraEmptyTubeBoost: 0
   IsDailyLevel: 0

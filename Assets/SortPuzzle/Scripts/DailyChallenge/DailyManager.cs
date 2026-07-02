@@ -1,5 +1,7 @@
+using System;
 using HyperBase.Core;
 using HyperBase.Data;
+using HyperBase.Notifications;
 using SortPuzzle.Data;
 using SortPuzzle.Economy;
 using UnityEngine;
@@ -15,25 +17,28 @@ namespace SortPuzzle.DailyChallenge
         private readonly BoostManager       _boosts;
         private readonly DailyLevelDatabase _db;
         private readonly DailyRewardConfig  _rewards;
+        private readonly NotificationManager _notifications;
 
         public int  CurrentStreak  => _save.Data.CurrentStreakDays;
         public int  LongestStreak  => _save.Data.LongestStreakDays;
         public bool CompletedToday => _save.Data.TodaysChallengeCompleted &&
-                                      _save.Data.LastDailyChallengeDate == TodayUtc;
+                                      _save.Data.LastDailyChallengeDate == TodayLocal;
 
-        private static string TodayUtc     => System.DateTime.UtcNow.ToString("yyyy-MM-dd");
-        private static string YesterdayUtc => System.DateTime.UtcNow.AddDays(-1).ToString("yyyy-MM-dd");
+        private static string TodayLocal     => DateTime.Now.ToString("yyyy-MM-dd");
+        private static string YesterdayLocal => DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd");
 
         [Inject]
         public DailyManager(SaveManager save, EventBus events, GoldManager gold,
-                            BoostManager boosts, DailyLevelDatabase db, DailyRewardConfig rewards)
+                            BoostManager boosts, DailyLevelDatabase db, DailyRewardConfig rewards,
+                            NotificationManager notifications)
         {
-            _save    = save;
-            _events  = events;
-            _gold    = gold;
-            _boosts  = boosts;
-            _db      = db;
-            _rewards = rewards;
+            _save          = save;
+            _events        = events;
+            _gold          = gold;
+            _boosts        = boosts;
+            _db            = db;
+            _rewards       = rewards;
+            _notifications = notifications;
         }
 
         // ── Query ─────────────────────────────────────────────────────────────
@@ -52,8 +57,8 @@ namespace SortPuzzle.DailyChallenge
 
         public void CheckStreakOnOpen()
         {
-            string today     = TodayUtc;
-            string yesterday = YesterdayUtc;
+            string today     = TodayLocal;
+            string yesterday = YesterdayLocal;
             string lastDate  = _save.Data.LastDailyChallengeDate;
 
             if (_save.Data.LastDailyResetDate != today)
@@ -78,6 +83,37 @@ namespace SortPuzzle.DailyChallenge
             }
         }
 
+
+        // ── Notifications ─────────────────────────────────────────────────────
+
+        /// <summary>
+        /// Cancels any pending reminder/streak-warning notifications and schedules fresh
+        /// ones. Call once on app open, after CheckStreakOnOpen() so today's completion
+        /// state is already up to date.
+        /// </summary>
+        public void ScheduleReminders()
+        {
+            _notifications.CancelAll();
+
+            DateTime now           = DateTime.Now;
+            DateTime todayAt10     = new DateTime(now.Year, now.Month, now.Day, 10, 0, 0);
+            DateTime reminderTime  = now < todayAt10 ? todayAt10 : todayAt10.AddDays(1);
+            _notifications.ScheduleAt("daily_reminder", "Ball Sort Puzzle", "Your daily puzzle is ready!", reminderTime);
+
+            if (_save.Data.CurrentStreakDays > 0 && !CompletedToday)
+            {
+                // Streak deadline is local midnight (CheckStreakOnOpen/CompleteChallenge both
+                // key off local dates now) — warn 4h before that.
+                DateTime warnLocal = now.Date.AddDays(1).AddHours(-4);
+                if (warnLocal > now)
+                {
+                    int streak = _save.Data.CurrentStreakDays;
+                    _notifications.ScheduleAt("streak_warning", "Don't lose your streak!",
+                        $"You're on a {streak}-day streak. Play today's puzzle before it resets!", warnLocal);
+                }
+            }
+        }
+
         // ── Complete Challenge ────────────────────────────────────────
 
         public void CompleteChallenge()
@@ -85,13 +121,13 @@ namespace SortPuzzle.DailyChallenge
             if (CompletedToday) { Debug.LogWarning("[DailyManager] Today already completed."); return; }
 
             string lastDate  = _save.Data.LastDailyChallengeDate;
-            bool consecutive = lastDate == YesterdayUtc;
+            bool consecutive = lastDate == YesterdayLocal;
 
             _save.Data.CurrentStreakDays = consecutive ? _save.Data.CurrentStreakDays + 1 : 1;
             if (_save.Data.CurrentStreakDays > _save.Data.LongestStreakDays)
                 _save.Data.LongestStreakDays = _save.Data.CurrentStreakDays;
 
-            _save.Data.LastDailyChallengeDate   = TodayUtc;
+            _save.Data.LastDailyChallengeDate   = TodayLocal;
             _save.Data.TodaysChallengeCompleted = true;
 
             int daySlot = DailyLevelDatabase.TodayIndex;

@@ -3,10 +3,13 @@ using UnityEngine;
 namespace SortPuzzle.Data
 {
     /// <summary>
-    /// Ordered pool of 30 daily challenge levels.
-    /// Day index = (DayOfYear - 1) % 30 — same puzzle globally each day.
-    /// Create via: Assets -> Create -> SortPuzzle -> Daily Level Database
-    /// </summary>
+        /// Ordered pool of 30 daily challenge levels.
+        /// Day index = (DayOfYear - 1) % 30, based on the device's local calendar day —
+        /// so the same puzzle number lines up for everyone on their own local date, but
+        /// rollover happens at a different wall-clock moment per timezone (not a single
+        /// global instant).
+        /// Create via: Assets -> Create -> SortPuzzle -> Daily Level Database
+        /// </summary>
     [CreateAssetMenu(fileName = "DailyLevelDatabase", menuName = "SortPuzzle/Daily Level Database")]
     public class DailyLevelDatabase : ScriptableObject
     {
@@ -15,10 +18,10 @@ namespace SortPuzzle.Data
 
         public int Count => DailyLevels?.Length ?? 0;
 
-        /// <summary>Returns the level for today based on UTC day of year.</summary>
+        /// <summary>Returns the level for today based on the device's local day of year.</summary>
         public LevelData GetTodaysLevel()
         {
-            int index = (System.DateTime.UtcNow.DayOfYear - 1) % 30;
+            int index = (System.DateTime.Now.DayOfYear - 1) % 30;
             return GetLevel(index);
         }
 
@@ -39,7 +42,7 @@ namespace SortPuzzle.Data
             return DailyLevels[clamped];
         }
 
-        /// <summary>Returns the 0-based day index for today (0–29).</summary>
-        public static int TodayIndex => (System.DateTime.UtcNow.DayOfYear - 1) % 30;
+        /// <summary>Returns the 0-based day index for today (0–29), based on local time.</summary>
+        public static int TodayIndex => (System.DateTime.Now.DayOfYear - 1) % 30;
     }
 }

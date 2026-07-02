@@ -14,13 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SortPuzzle.Data.LevelData
   LevelIndex: 19
   DisplayName: Level 20
-  SceneName: 
-  SoftCurrencyReward: 30
-  HardCurrencyReward: 0
   DifficultyRating: 5
   TimeLimit: 0
   GameSpeedMultiplier: 1
-  WorldIndex: 0
   TubeCount: 7
   EmptyTubeCount: 2
   TubeCapacity: 4
@@ -35,7 +31,7 @@ MonoBehaviour:
   - Balls: 00000000000000000000000000000000
   ParMoves: 15
   ValidatedSolution: f1t3,f3t6,f0t3,f4t0,f1t4,f2t1,f2t0,f2t5,f1t2,f4t1,f3t4,f5t6,f5t2,f4t5,f1t4
-  GoldReward: 25
+  GoldReward: 75
   ContainsUndoBoost: 1
-  ContainsShuffleBoost: 1
+  ContainsExtraEmptyTubeBoost: 1
   IsDailyLevel: 0

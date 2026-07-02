@@ -77,7 +77,7 @@ namespace SortPuzzle.Economy
         /// </summary>
         public bool TryClaimDailyLoginBonus()
         {
-            string today = System.DateTime.UtcNow.ToString("yyyy-MM-dd");
+            string today = System.DateTime.Now.ToString("yyyy-MM-dd");
             if (_save.Data.LastDailyResetDate == today && _save.Data.DailyLoginBonusClaimed)
                 return false;
 
@@ -98,7 +98,7 @@ namespace SortPuzzle.Economy
         /// </summary>
         public bool TryClaimRewardedAdGold()
         {
-            string today = System.DateTime.UtcNow.ToString("yyyy-MM-dd");
+            string today = System.DateTime.Now.ToString("yyyy-MM-dd");
             if (_save.Data.LastDailyResetDate != today)
             {
                 _save.Data.LastDailyResetDate      = today;

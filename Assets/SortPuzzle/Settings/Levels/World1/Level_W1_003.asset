@@ -14,13 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SortPuzzle.Data.LevelData
   LevelIndex: 2
   DisplayName: Level 3
-  SceneName: GameScene
-  SoftCurrencyReward: 40
-  HardCurrencyReward: 0
   DifficultyRating: 7
   TimeLimit: 0
   GameSpeedMultiplier: 1
-  WorldIndex: 0
   TubeCount: 8
   EmptyTubeCount: 2
   TubeCapacity: 4
@@ -37,6 +33,6 @@ MonoBehaviour:
   ParMoves: 22
   ValidatedSolution: 
   GoldReward: 40
-  ContainsUndoBoost: 1
-  ContainsShuffleBoost: 1
+  ContainsUndoBoost: 0
+  ContainsExtraEmptyTubeBoost: 0
   IsDailyLevel: 0
