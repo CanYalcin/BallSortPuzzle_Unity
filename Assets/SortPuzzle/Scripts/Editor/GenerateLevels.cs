@@ -45,6 +45,7 @@ namespace SortPuzzle.DevTools
                 levels[i] = raw[i]; // may be null if asset was deleted
 
             int created = 0;
+            int failed  = 0;
 
             for (int i = 0; i < 30; i++)
             {
@@ -68,6 +69,7 @@ namespace SortPuzzle.DevTools
                 if (ld == null)
                 {
                     Debug.LogWarning($"[GenerateLevels] Failed to generate {assetName} (diff {diff}) — slot left empty.");
+                    failed++;
                     continue;
                 }
 
@@ -81,7 +83,20 @@ namespace SortPuzzle.DevTools
             EditorUtility.SetDirty(db);
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
-            Debug.Log($"[GenerateLevels] Done. Created {created} levels. Database total: {db.Levels.Length}.");
+            int filled = CountFilled(db.Levels);
+            if (failed > 0)
+                Debug.LogWarning($"[GenerateLevels] Done WITH GAPS. Created {created}, Failed {failed}. " +
+                                  $"Total filled: {filled}/30 — {30 - filled} slot(s) are null and will break the game if reached.");
+            else
+                Debug.Log($"[GenerateLevels] Done. Created {created} levels. Total filled: {filled}/30.");
+        }
+
+        private static int CountFilled(LevelConfig[] arr)
+        {
+            int n = 0;
+            if (arr == null) return 0;
+            foreach (var l in arr) if (l != null) n++;
+            return n;
         }
 
         private static int DifficultyFor(int index)

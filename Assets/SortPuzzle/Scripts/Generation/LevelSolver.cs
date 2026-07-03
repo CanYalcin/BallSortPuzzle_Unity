@@ -16,13 +16,25 @@ namespace SortPuzzle.Generation
     /// </summary>
     public static class LevelSolver
     {
-        private const int MaxDepth = 300;
+        private const int    MaxDepth       = 300;
+        // Wall-clock bound, not a node-count bound: a maximally-scrambled high-difficulty
+        // board (e.g. 12 tubes / 10 colors) can have a reachable state space large enough
+        // that even this correctly-memoized BFS takes many minutes on an unlucky seed. That
+        // was observed directly in CI: a single Solve() call ran 1105s and blew past even a
+        // generous 600s test timeout. Bounding wall-clock time (checked periodically, not
+        // every node, to keep Stopwatch overhead negligible) makes worst-case runtime
+        // deterministic regardless of board pathology or runner speed. Hitting the cap is
+        // treated identically to "proven unsolvable" by every caller — LevelGenerator retries
+        // either way, and difficulty 8-10 generation is already documented as best-effort.
+        private const double MaxSolveSeconds = 30.0;
+        private const int    TimeCheckEvery  = 1024; // nodes between Stopwatch checks
 
         public struct SolveResult
         {
             public bool   IsSolvable;
             public int    ParMoves;      // optimal solution move count
             public string SolutionPath; // "f0t2,f2t1,..." for each pour
+            public bool   SearchBudgetExceeded; // true if aborted by the time cap, not proven unsolvable
         }
 
         public static SolveResult Solve(LevelData levelData)
@@ -39,8 +51,20 @@ namespace SortPuzzle.Generation
             queue.Enqueue((initial, ""));
             visited.Add(startHash);
 
+            var sw          = System.Diagnostics.Stopwatch.StartNew();
+            int nodesChecked = 0;
+
             while (queue.Count > 0)
             {
+                if ((++nodesChecked % TimeCheckEvery) == 0 && sw.Elapsed.TotalSeconds > MaxSolveSeconds)
+                {
+                    return new SolveResult
+                    {
+                        IsSolvable = false, ParMoves = 0, SolutionPath = "",
+                        SearchBudgetExceeded = true
+                    };
+                }
+
                 var (tubes, path) = queue.Dequeue();
 
                 int depth = path.Length == 0 ? 0 : (path.Split(',').Length);
