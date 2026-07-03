@@ -24,6 +24,32 @@
       "dependencies": {},
       "hash": "38f31affdc54bf7ed0ffb8b97f3444395912a398"
     },
+    "com.google.play.common": {
+      "version": "1.9.2",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://package.openupm.com"
+    },
+    "com.google.play.core": {
+      "version": "1.8.6",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {
+        "com.google.external-dependency-manager": "1.2.185"
+      },
+      "url": "https://package.openupm.com"
+    },
+    "com.google.play.review": {
+      "version": "1.8.4",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.google.play.common": "1.9.2",
+        "com.google.play.core": "1.8.6"
+      },
+      "url": "https://package.openupm.com"
+    },
     "com.revenuecat.purchases-unity": {
       "version": "9.3.0",
       "depth": 0,

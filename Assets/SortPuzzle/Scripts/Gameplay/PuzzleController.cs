@@ -14,11 +14,11 @@ namespace SortPuzzle.Gameplay
     {
         /// Events — subscribe in TubeView / LevelController for visual and audio feedback.
         /// Parameters: OnPoured(from, to, color, ballCount), OnTubeCompleted(tubeIndex, color),
-        /// OnWon(pours, par, stars), OnUndone(), OnRestarted().
+        /// OnWon(pours, par, stars), OnUndone(fromTube, toTube), OnRestarted().
         public event Action<int, int, int, int> OnPoured;
         public event Action<int, int>           OnTubeCompleted;
         public event Action<int, int, int>      OnWon;
-        public event Action                     OnUndone;
+        public event Action<int, int>           OnUndone; // fromTube, toTube (tubes involved in the undone move)
         public event Action                     OnRestarted;
 
         private TubeData[]                 _tubes;
@@ -162,7 +162,7 @@ namespace SortPuzzle.Gameplay
                 d.Balls[di]             = 0;
             }
             _solved = false;
-            OnUndone?.Invoke();
+            OnUndone?.Invoke(rec.FromTube, rec.ToTube);
             return true;
         }
 

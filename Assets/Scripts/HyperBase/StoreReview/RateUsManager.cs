@@ -3,6 +3,9 @@ using HyperBase.Core;
 using HyperBase.Data;
 using UnityEngine;
 using VContainer;
+#if UNITY_ANDROID && !UNITY_EDITOR
+using Google.Play.Review;
+#endif
 
 namespace HyperBase.StoreReview
 {
@@ -47,14 +50,25 @@ namespace HyperBase.StoreReview
 
 #if UNITY_IOS && !UNITY_EDITOR
             UnityEngine.iOS.Device.RequestStoreReview();
-#endif
-            // Android: add com.google.play.review via OpenUPM and call
-            //   var rm = new Google.Play.Review.ReviewManager();
-            //   var req = rm.RequestReviewFlow(); await req;
-            //   if(req.Error == Google.Play.Review.ReviewErrorCode.NoError)
-            //     await rm.LaunchReviewFlow(req.GetResult());
-
             await UniTask.CompletedTask;
+#elif UNITY_ANDROID && !UNITY_EDITOR
+            var reviewManager = new ReviewManager();
+            var requestOp = reviewManager.RequestReviewFlow();
+            await UniTask.WaitUntil(() => requestOp.IsDone);
+            if (requestOp.Error != ReviewErrorCode.NoError)
+            {
+                Debug.LogWarning($"[RateUs] RequestReviewFlow failed: {requestOp.Error}");
+                return;
+            }
+            var launchOp = reviewManager.LaunchReviewFlow(requestOp.GetResult());
+            await UniTask.WaitUntil(() => launchOp.IsDone);
+            if (launchOp.Error != ReviewErrorCode.NoError)
+                Debug.LogWarning($"[RateUs] LaunchReviewFlow failed: {launchOp.Error}");
+            // Google's API deliberately never tells us whether the dialog was actually
+            // shown or the user rated — same as Apple's. We don't try to infer it.
+#else
+            await UniTask.CompletedTask;
+#endif
         }
 
         [System.Diagnostics.Conditional("UNITY_EDITOR")]

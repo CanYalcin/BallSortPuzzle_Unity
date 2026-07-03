@@ -12,6 +12,8 @@ dependencies {
     implementation 'com.google.android.gms:play-services-appset:16.0.2' // Assets/GameAnalytics/Editor/Android/Dependencies.xml:4
     implementation 'com.google.android.gms:play-services-base:18.10.0' // Assets/Firebase/Editor/AppDependencies.xml:20
     implementation 'com.google.android.instantapps:instantapps:1.1.0' // Assets/GameAnalytics/Editor/Android/Dependencies.xml:3
+    implementation 'com.google.android.play:core-common:2.0.4' // Packages/com.google.play.core/Editor/Dependencies.xml:3
+    implementation 'com.google.android.play:review:2.0.2' // Packages/com.google.play.review/Editor/Dependencies.xml:3
     implementation 'com.google.firebase:firebase-analytics:23.0.0' // Assets/Firebase/Editor/RemoteConfigDependencies.xml:18
     implementation 'com.google.firebase:firebase-analytics-unity:13.9.0' // Assets/Firebase/Editor/AnalyticsDependencies.xml:21
     implementation 'com.google.firebase:firebase-app-unity:13.9.0' // Assets/Firebase/Editor/AppDependencies.xml:25

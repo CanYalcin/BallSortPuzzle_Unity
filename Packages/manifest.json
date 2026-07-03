@@ -2,6 +2,7 @@
   "dependencies": {
     "com.coplaydev.unity-mcp": "https://github.com/CoplayDev/unity-mcp.git?path=/MCPForUnity#main",
     "com.google.external-dependency-manager": "https://github.com/googlesamples/unity-jar-resolver.git?path=upm",
+    "com.google.play.review": "1.8.4",
     "com.revenuecat.purchases-unity": "9.3.0",
     "com.unity.2d.animation": "13.0.4",
     "com.unity.2d.aseprite": "3.0.1",
@@ -68,7 +69,11 @@
       "url": "https://package.openupm.com",
       "scopes": [
         "com.openupm",
-        "com.revenuecat.purchases-unity"
+        "com.revenuecat.purchases-unity",
+        "com.google.external-dependency-manager",
+        "com.google.play.common",
+        "com.google.play.core",
+        "com.google.play.review"
       ]
     }
   ]

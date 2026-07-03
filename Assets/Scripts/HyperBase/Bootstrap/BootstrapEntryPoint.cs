@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Firebase;
@@ -114,6 +115,12 @@ namespace HyperBase.Bootstrap
             _analytics.RegisterProvider(new GameAnalyticsProvider());
             _analytics.SubscribeToEvents();
             _analytics.SetUserProperty("total_sessions", _save.Data.TotalSessionCount.ToString());
+            _analytics.LogEvent("session_start", new Dictionary<string, object>
+            {
+                { "session_number",             _save.Data.TotalSessionCount },
+                { "is_first_session",           _save.Data.TotalSessionCount == 1 },
+                { "offline_duration_seconds",   _time.OfflineDuration.TotalSeconds },
+            });
 
             // 8. Audio
             _audio.Initialize();

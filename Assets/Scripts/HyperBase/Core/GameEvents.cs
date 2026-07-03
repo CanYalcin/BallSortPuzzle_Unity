@@ -23,8 +23,9 @@ namespace HyperBase.Core
         public readonly int   LevelIndex;
         public readonly float CompletionTime;
         public readonly bool  IsDaily;
-        public OnLevelCompleted(int levelIndex, float completionTime, bool isDaily = false)
-        { LevelIndex = levelIndex; CompletionTime = completionTime; IsDaily = isDaily; }
+        public readonly int   GoldEarned; // normal levels only — daily gold is decided later by DailyManager
+        public OnLevelCompleted(int levelIndex, float completionTime, bool isDaily = false, int goldEarned = 0)
+        { LevelIndex = levelIndex; CompletionTime = completionTime; IsDaily = isDaily; GoldEarned = goldEarned; }
     }
 
     /// <summary>Fired by LevelManager when the player fails a level.</summary>

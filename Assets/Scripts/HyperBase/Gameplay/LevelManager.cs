@@ -104,7 +104,7 @@ public void CompleteCurrentLevel()
                 d.HighestUnlockedLevel = Mathf.Max(d.HighestUnlockedLevel, d.CurrentLevelIndex);
             }
 
-            _events.Publish(new OnLevelCompleted(completedIdx, dur, false));
+            _events.Publish(new OnLevelCompleted(completedIdx, dur, false, ld != null ? ld.GoldReward : 0));
             _game.TransitionTo(GameState.Win);
             _save.SaveAsync().Forget();
         }

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using HyperBase.Core;
 using HyperBase.Gameplay;
+using HyperBase.VFX;
 using SortPuzzle.Data;
 using SortPuzzle.Economy;
 using UnityEngine;
@@ -30,20 +31,24 @@ namespace SortPuzzle.Gameplay
         private BoostManager     _boostManager;
         private GoldManager      _goldManager;
         private BoostSystem      _boostSystem;
+        private VFXManager       _vfx;
         private HyperBase.UI.Screens.GameplayScreen _gameplayScreen;
 
         [Inject]
         public void Construct(PuzzleController puzzle, LevelManager levelManager,
                               BoostManager boostManager, GoldManager goldManager,
-                              BoostSystem boostSystem, EventBus events)
+                              BoostSystem boostSystem, VFXManager vfx, EventBus events)
         {
             _puzzle       = puzzle;
             _levelManager = levelManager;
             _boostManager = boostManager;
             _goldManager  = goldManager;
             _boostSystem  = boostSystem;
+            _vfx          = vfx;
         }
 
+                private RectTransform VfxLayer => _canvasRoot != null ? _canvasRoot : _tubeContainer;
+private Vector2   _lastUndoScreenPos;
         private readonly List<TubeView> _views = new();
         private int       _activeCount;
         private int       _sel    = -1;
@@ -73,7 +78,13 @@ namespace SortPuzzle.Gameplay
             if (_ld == null) { Debug.LogError("[LevelController] CurrentLevel is not LevelData."); return; }
 
             _puzzle.Initialize(_ld);
-            _puzzle.OnWon += (pours, par, stars) => _levelManager.CompleteCurrentLevel();
+            _puzzle.OnWon += (pours, par, stars) =>
+            {
+                Vector2 center = VfxLayer != null ? (Vector2)VfxLayer.TransformPoint(VfxLayer.rect.center) : Vector2.zero;
+                _vfx?.Play(VFXType.Confetti, VfxLayer, center);
+                _levelManager.CompleteCurrentLevel();
+            };
+            _puzzle.OnUndone += OnPuzzleUndone;
 
             for (int i = 0; i < _ld.TubeCount + _extraPool; i++)
             {
@@ -117,6 +128,7 @@ namespace SortPuzzle.Gameplay
                 if (!_puzzle.CanUndoMove) return;
                 if (!_boostManager.TryUseBoost(BoostType.Undo)) return;
                 _puzzle.Undo();
+                _vfx?.Play(VFXType.BoostUsed, VfxLayer, _lastUndoScreenPos);
                 if (_sel >= 0) { _views[_sel].SetSelected(false); _sel = -1; }
                 for (int i = 0; i < _activeCount && i < _puzzle.TubeCount; i++)
                     _views[i].Refresh(_puzzle.GetTube(i));
@@ -155,6 +167,7 @@ namespace SortPuzzle.Gameplay
                 }
                 for (int i = 0; i < _activeCount && i < _puzzle.TubeCount; i++)
                     _views[i].Refresh(_puzzle.GetTube(i));
+                _vfx?.Play(VFXType.BoostUsed, VfxLayer, _views[ni].GetSlotScreenPos(0));
             }
             else
             {
@@ -170,6 +183,15 @@ namespace SortPuzzle.Gameplay
             if (_sel >= 0) { _views[_sel].SetSelected(false); _sel = -1; }
             for (int i = 0; i < _activeCount && i < _puzzle.TubeCount; i++)
                 _views[i].Refresh(_puzzle.GetTube(i));
+        }
+
+        private void OnPuzzleUndone(int fromTube, int toTube)
+        {
+            if (fromTube < 0 || fromTube >= _views.Count) return;
+            var tube = _puzzle.GetTube(fromTube);
+            int slot = Mathf.Max(0, tube.TopIndex);
+            _lastUndoScreenPos = _views[fromTube].GetSlotScreenPos(slot);
+            _vfx?.Play(VFXType.Undo, VfxLayer, _lastUndoScreenPos);
         }
 
         // ── Tap handler ───────────────────────────────────────────────────────
@@ -232,6 +254,10 @@ namespace SortPuzzle.Gameplay
                 animRoot, srcPositions, dstPositions, _ballSize, () =>
                 {
                     _puzzle.Pour(from, to);
+                    Vector2 landPos = dstPositions[moveCount - 1];
+                    _vfx?.Play(VFXType.PourSplash, VfxLayer, landPos);
+                    if (_puzzle.GetTube(to).IsComplete)
+                        _vfx?.Play(VFXType.TubeComplete, VfxLayer, landPos);
                     _views[from].Refresh(_puzzle.GetTube(from));
                     _views[to].Refresh(_puzzle.GetTube(to));
                     _locked = false;
@@ -242,6 +268,7 @@ namespace SortPuzzle.Gameplay
         {
             for (int i = 0; i < _activeCount && i < _views.Count; i++)
                 if (_views[i] != null) _views[i].OnTapped -= OnTap;
+            if (_puzzle != null) _puzzle.OnUndone -= OnPuzzleUndone;
         }
     }
 }

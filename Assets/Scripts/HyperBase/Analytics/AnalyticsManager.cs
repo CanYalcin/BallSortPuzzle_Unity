@@ -29,7 +29,7 @@ namespace HyperBase.Analytics
         {
             // Core level events
             _events.Subscribe<OnLevelStarted>    (e => LogLevelStart   (e.LevelIndex));
-            _events.Subscribe<OnLevelCompleted>  (e => LogLevelComplete(e.LevelIndex, e.CompletionTime, 0));
+            _events.Subscribe<OnLevelCompleted>  (e => LogLevelComplete(e.LevelIndex, e.CompletionTime, e.IsDaily ? 100 : e.GoldEarned));
             _events.Subscribe<OnLevelFailed>     (e => LogLevelFail    (e.LevelIndex, 0f));
 
             // Ad events

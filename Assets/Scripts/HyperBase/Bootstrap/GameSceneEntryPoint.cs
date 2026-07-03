@@ -1,5 +1,4 @@
 using Cysharp.Threading.Tasks;
-using HyperBase.Analytics;
 using HyperBase.Audio;
 using HyperBase.Core;
 using HyperBase.Gameplay;
@@ -34,7 +33,6 @@ namespace HyperBase.Bootstrap
         private readonly GoldManager      _gold;
         private readonly BoostManager     _boosts;
         private readonly DailyManager     _daily;
-        private readonly AnalyticsManager _analytics;
         private readonly SceneLoader      _loader;
         private readonly HyperBase.Data.SaveManager _save;
 
@@ -48,9 +46,7 @@ namespace HyperBase.Bootstrap
         private DailyChallengeScreen _dailyChallenge;
         private ShopScreen           _shop;
         private int                  _levelsSinceAd;
-        private const int            InterstitialEveryN = 3;
-                private int _lastGoldEarned; // cached from OnPuzzleWon; consumed by OnLevelCompleted's analytics call
-private System.Action<OnNoAdsActivated> _onNoAds;
+        private const int            InterstitialEveryN = 3;private System.Action<OnNoAdsActivated> _onNoAds;
 
         [Inject]
         public GameSceneEntryPoint(
@@ -64,7 +60,6 @@ private System.Action<OnNoAdsActivated> _onNoAds;
             GoldManager      gold,
             BoostManager     boosts,
             DailyManager     daily,
-            AnalyticsManager analytics,
             SceneLoader      loader,
             HyperBase.Data.SaveManager save,
             MainMenuScreen   mainMenu,
@@ -84,7 +79,6 @@ private System.Action<OnNoAdsActivated> _onNoAds;
             _gold      = gold;
             _boosts    = boosts;
             _daily     = daily;
-            _analytics = analytics;
             _loader    = loader;
             _save      = save;
             _mainMenu  = mainMenu;
@@ -173,7 +167,6 @@ private void OnPuzzleWon(SortPuzzle.OnPuzzleWon e)
         {
             bool isDaily           = _levels.IsDailyMode;
             int  goldActuallyAdded = isDaily ? 100 : e.GoldEarned; // e.GoldEarned is LevelData.GoldReward, computed once in PuzzleController.Pour()
-            _lastGoldEarned        = goldActuallyAdded;
             _win.SetWinData(goldActuallyAdded, isDaily);
         }
 
@@ -182,7 +175,6 @@ private void OnPuzzleWon(SortPuzzle.OnPuzzleWon e)
             if (e.IsDaily)
             {
                 _daily.CompleteChallenge();
-                _analytics.LogLevelComplete(-1, e.CompletionTime, 100);
                 return;
             }
 
@@ -193,8 +185,6 @@ private void OnPuzzleWon(SortPuzzle.OnPuzzleWon e)
                 _levelsSinceAd = 0;
             }
             _ads.SetCurrentLevel(_levels.CurrentIndex);
-            _analytics.LogLevelComplete(e.LevelIndex, e.CompletionTime, _lastGoldEarned);
-
             if (e.LevelIndex == 2 && !_save.Data.StarterPackPurchased && _shop != null)
                 _ui.ShowScreenAsync<ShopScreen>().Forget();
         }

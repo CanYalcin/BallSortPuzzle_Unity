@@ -12,4 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: defd5e9a8db279349a7f5b9a5050c8a9, type: 3}
   m_Name: VFXConfig
   m_EditorClassIdentifier: Assembly-CSharp::HyperBase.VFX.VFXConfig
-  Effects: []
+  Effects:
+  - Type: 1
+    Prefab: {fileID: 5063834550932269543, guid: 2a49a62fb0369dd49aaa6c82b60d6ad8, type: 3}
+    PrewarmCount: 5
+  - Type: 2
+    Prefab: {fileID: 2184521591071797195, guid: 1fc9c181e36dafc47bcb193e5df18a39, type: 3}
+    PrewarmCount: 3
+  - Type: 3
+    Prefab: {fileID: 1049045582318502522, guid: cf11f392d88e9ca4f8bf80b30a226f23, type: 3}
+    PrewarmCount: 3
+  - Type: 6
+    Prefab: {fileID: 7425606306133068500, guid: 095bf9b03878a2049b04f48840501aa0, type: 3}
+    PrewarmCount: 2
+  - Type: 8
+    Prefab: {fileID: 3478097128001435884, guid: f579ddbce1eb7624e96754daafefff81, type: 3}
+    PrewarmCount: 3

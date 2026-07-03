@@ -21,6 +21,7 @@ namespace HyperBase.Core
         public float    TotalSeconds    => _save.Data.TotalPlayTimeSeconds + SessionSeconds;
         public TimeSpan TotalPlayTime   => TimeSpan.FromSeconds(TotalSeconds);
         public TimeSpan OfflineDuration { get; private set; }
+        public int      LevelsCompletedAtSessionStart { get; private set; }
 
         [Inject]
         public TimeManager(SaveManager save) => _save = save;
@@ -28,6 +29,7 @@ namespace HyperBase.Core
         public void Initialize()
         {
             _sessionStart = Time.unscaledTime;
+            LevelsCompletedAtSessionStart = _save.Data.TotalLevelsCompleted;
             string last   = _save.Data.LastSaveTime;
             if (!string.IsNullOrEmpty(last) && DateTime.TryParse(last, out var dt))
             {
