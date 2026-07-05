@@ -68,8 +68,6 @@ namespace HyperBase.Data
 
         // ── Daily Economy (resets each UTC day) ───────────────────────────────
         /// <summary>UTC date of last daily reset. Used to reset daily earn limits.</summary>
-        public string LastDailyResetDate     = "";
-        public int    DailyRewardedAdsWatched = 0;  // cap: 5 per day
-        public bool   DailyLoginBonusClaimed = false;
+        public string LastDailyResetDate     = "";        public bool   DailyLoginBonusClaimed = false;
     }
 }

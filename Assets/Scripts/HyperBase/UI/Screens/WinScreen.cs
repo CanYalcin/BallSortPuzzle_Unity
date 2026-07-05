@@ -2,6 +2,7 @@ using Cysharp.Threading.Tasks;
 using HyperBase.Audio;
 using HyperBase.Core;
 using HyperBase.Monetization;
+using SortPuzzle.Economy;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -19,13 +20,14 @@ namespace HyperBase.UI.Screens
         private AudioManager _audio;
         private AdManager    _ads;
         private EventBus     _events;
+        private GoldManager  _gold;
 
         private int  _baseGold;
         private bool _isDaily;
 
         [Inject]
-        public void Construct(GameManager game, AudioManager audio, AdManager ads, EventBus events)
-        { _game = game; _audio = audio; _ads = ads; _events = events; }
+        public void Construct(GameManager game, AudioManager audio, AdManager ads, EventBus events, GoldManager gold)
+        { _game = game; _audio = audio; _ads = ads; _events = events; _gold = gold; }
 
         protected override void Awake()
         {
@@ -86,6 +88,7 @@ namespace HyperBase.UI.Screens
                 if (!success) return;
                 _events.Publish(new OnAdCompleted(AdType.Rewarded, true));
                 int tripled = _baseGold * 3;
+                _gold.Add(_baseGold * 2, "triple_gold_win"); // base 1x was already credited by LevelManager before this screen showed — only add the extra 2x
                 if (_goldEarnedLabel) _goldEarnedLabel.text = $"+{tripled} gold";
                 if (_tripleGoldBtn)   _tripleGoldBtn.gameObject.SetActive(false);
             }, "triple_gold_win");

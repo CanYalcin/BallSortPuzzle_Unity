@@ -11,11 +11,11 @@ namespace SortPuzzle.Economy
     /// Publishes OnGoldChanged and auto-saves on every change.
     ///
     /// Gold Sources:
-    ///   Level complete  10–50g  (varies by difficulty)
-    ///   Daily challenge 100g
-    ///   Daily login      50g
-    ///   Rewarded ad     300g   (capped at 5 per day)
-    ///   IAP purchase    varies
+    ///   Level complete   10–50g  (varies by difficulty)
+    ///   Daily challenge  100g
+    ///   Daily login       50g
+    ///   Triple-gold ad   +2x base reward (WinScreen.OnTripleGold, non-daily wins only)
+    ///   IAP purchase     varies
     /// </summary>
     public class GoldManager
     {
@@ -84,36 +84,11 @@ namespace SortPuzzle.Economy
             if (_save.Data.LastDailyResetDate != today)
             {
                 _save.Data.LastDailyResetDate       = today;
-                _save.Data.DailyRewardedAdsWatched  = 0;
                 _save.Data.DailyLoginBonusClaimed   = false;
             }
 
             _save.Data.DailyLoginBonusClaimed = true;
             Add(_config.DailyLoginBonusGold, "daily_login");
-            return true;
-        }
-
-        /// <summary>
-        /// Claims gold for watching a rewarded ad. Returns false if daily cap reached.
-        /// </summary>
-        public bool TryClaimRewardedAdGold()
-        {
-            string today = System.DateTime.Now.ToString("yyyy-MM-dd");
-            if (_save.Data.LastDailyResetDate != today)
-            {
-                _save.Data.LastDailyResetDate      = today;
-                _save.Data.DailyRewardedAdsWatched = 0;
-                _save.Data.DailyLoginBonusClaimed  = false;
-            }
-
-            if (_save.Data.DailyRewardedAdsWatched >= _config.DailyRewardedAdCap)
-            {
-                Debug.Log("[GoldManager] Daily rewarded ad cap reached.");
-                return false;
-            }
-
-            _save.Data.DailyRewardedAdsWatched++;
-            Add(_config.RewardedAdGoldAmount, "rewarded_ad");
             return true;
         }
     }

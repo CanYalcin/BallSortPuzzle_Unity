@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e2958b50b933b448b475d5de033f947, type: 3}
+  m_Name: Candidate_D8_005
+  m_EditorClassIdentifier: Assembly-CSharp::SortPuzzle.Data.LevelData
+  LevelIndex: 5
+  DisplayName: Candidate D8 #6
+  DifficultyRating: 8
+  TimeLimit: 0
+  GameSpeedMultiplier: 1
+  TubeCount: 9
+  EmptyTubeCount: 2
+  TubeCapacity: 4
+  ColorCount: 7
+  Tubes:
+  - Balls: 01000000060000000200000007000000
+  - Balls: 05000000070000000400000006000000
+  - Balls: 00000000000000000000000000000000
+  - Balls: 04000000040000000200000003000000
+  - Balls: 05000000040000000700000006000000
+  - Balls: 01000000030000000500000003000000
+  - Balls: 01000000070000000100000002000000
+  - Balls: 00000000000000000000000000000000
+  - Balls: 05000000020000000600000003000000
+  ParMoves: 24
+  ValidatedSolution: f0t2,f3t7,f0t3,f1t0,f4t0,f4t2,f1t4,f1t2,f5t7,f1t5,f0t1,f8t7,f8t1,f3t8,f4t3,f5t4,f5t7,f0t5,f6t0,f6t5,f6t2,f5t6,f8t0,f4t8
+  GoldReward: 50
+  ContainsUndoBoost: 0
+  ContainsExtraEmptyTubeBoost: 0
+  IsDailyLevel: 0

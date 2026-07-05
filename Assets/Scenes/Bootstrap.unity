@@ -466,6 +466,10 @@ MonoBehaviour:
   _boostConfig: {fileID: 11400000, guid: a13a0052531e1704e8af908da072155d, type: 2}
   _dailyLevelDatabase: {fileID: 11400000, guid: 412d231b7207e894aad1697f8ba385ba, type: 2}
   _dailyRewardConfig: {fileID: 11400000, guid: 9cc4bd225c83e4a4eb47d566a73c6b74, type: 2}
+  _useTestLevelDatabase: 1
+  _testLevelDatabase: {fileID: 11400000, guid: 1852975d30540ab40a8bf760aff15a0d, type: 2}
+  _useTestDailyLevelDatabase: 0
+  _testDailyLevelDatabase: {fileID: 11400000, guid: 2ff75acdd862ceb4f8f2089b1c46b594, type: 2}
   _poolManager: {fileID: 1199463264}
   _lifecycleHandler: {fileID: 1199463263}
   _debugConsole: {fileID: 1966462277}

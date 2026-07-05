@@ -63,9 +63,7 @@ namespace SortPuzzle.DailyChallenge
 
             if (_save.Data.LastDailyResetDate != today)
             {
-                _save.Data.LastDailyResetDate       = today;
-                _save.Data.DailyRewardedAdsWatched  = 0;
-                _save.Data.DailyLoginBonusClaimed   = false;
+                _save.Data.LastDailyResetDate       = today;                _save.Data.DailyLoginBonusClaimed   = false;
                 _save.Data.TodaysChallengeCompleted = false;
             }
 

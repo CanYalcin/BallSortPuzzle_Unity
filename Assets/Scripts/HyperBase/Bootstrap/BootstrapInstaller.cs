@@ -34,6 +34,12 @@ namespace HyperBase.Bootstrap
         [SerializeField] private DailyLevelDatabase _dailyLevelDatabase;
         [SerializeField] private DailyRewardConfig  _dailyRewardConfig;
 
+        [Header("Testing Overrides — leave OFF for production builds")]
+        [SerializeField] private bool                _useTestLevelDatabase;
+        [SerializeField] private LevelDatabase        _testLevelDatabase;
+        [SerializeField] private bool                _useTestDailyLevelDatabase;
+        [SerializeField] private DailyLevelDatabase   _testDailyLevelDatabase;
+
         [Header("Scene MonoBehaviour References")]
         [SerializeField] private ObjectPoolManager           _poolManager;
         [SerializeField] private ApplicationLifecycleHandler _lifecycleHandler;
@@ -44,6 +50,14 @@ namespace HyperBase.Bootstrap
 
         [Header("RevenueCat API Key")]
         [SerializeField] private string _revenueCatApiKey = "YOUR_REVENUECAT_API_KEY";
+
+        private void OnValidate()
+        {
+            if (_useTestLevelDatabase)
+                Debug.LogWarning("[BootstrapInstaller] TEST level database is ACTIVE — turn this off before a real build!");
+            if (_useTestDailyLevelDatabase)
+                Debug.LogWarning("[BootstrapInstaller] TEST daily level database is ACTIVE — turn this off before a real build!");
+        }
 
         protected override void Configure(IContainerBuilder builder)
         {
@@ -77,7 +91,8 @@ namespace HyperBase.Bootstrap
             builder.Register<AnalyticsManager>(Lifetime.Singleton);
 
             // HyperBase Gameplay
-            builder.RegisterInstance(_levelDatabase);
+            var effectiveLevelDb = (_useTestLevelDatabase && _testLevelDatabase != null) ? _testLevelDatabase : _levelDatabase;
+            builder.RegisterInstance(effectiveLevelDb);
             builder.Register<LevelManager>(Lifetime.Singleton);
 
             // UI
@@ -99,7 +114,8 @@ namespace HyperBase.Bootstrap
 
             // SortPuzzle Economy
             builder.RegisterInstance(_boostConfig);
-            builder.RegisterInstance(_dailyLevelDatabase);
+            var effectiveDailyDb = (_useTestDailyLevelDatabase && _testDailyLevelDatabase != null) ? _testDailyLevelDatabase : _dailyLevelDatabase;
+            builder.RegisterInstance(effectiveDailyDb);
             builder.RegisterInstance(_dailyRewardConfig);
             builder.Register<GoldManager> (Lifetime.Singleton);
             builder.Register<BoostManager>(Lifetime.Singleton);

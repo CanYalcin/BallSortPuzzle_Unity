@@ -8,11 +8,6 @@ namespace SortPuzzle.Data
         [Header("Boost Gold Costs")]
         public int UndoGoldCost           = 500;
         public int ExtraEmptyTubeGoldCost = 1200;
-
-        [Header("Rewarded Ad Gold")]
-        public int RewardedAdGoldAmount = 300;
-        public int DailyRewardedAdCap   = 5;
-
         [Header("Daily Economy")]
         public int DailyLoginBonusGold = 50;
 

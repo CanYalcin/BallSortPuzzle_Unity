@@ -12,9 +12,7 @@ namespace SortPuzzle.Editor
         private int     _tubeCount    = 6;
         private int     _emptyTubes   = 2;
         private int     _capacity     = 4;
-        private int     _colorCount   = 4;
-        private int     _worldIndex   = 0;
-        private int     _levelIndex   = 0;
+        private int     _colorCount   = 4;        private int     _levelIndex   = 0;
         private int     _difficulty   = 3;
         private int     _goldReward   = 20;
         private bool    _isDailyLevel = false;
@@ -49,12 +47,11 @@ namespace SortPuzzle.Editor
         private void OnGUI()
         {
             _scroll = EditorGUILayout.BeginScrollView(_scroll);
-            EditorGUILayout.LabelField("Water Sort Level Editor", EditorStyles.boldLabel);
+            EditorGUILayout.LabelField("Ball Sort Level Editor", EditorStyles.boldLabel);
             EditorGUILayout.Space(4);
 
             // Config
             EditorGUI.BeginChangeCheck();
-            _worldIndex   = EditorGUILayout.IntSlider("World",       _worldIndex,  0, 2);
             _levelIndex   = EditorGUILayout.IntField ("Level Index", _levelIndex);
             _tubeCount    = EditorGUILayout.IntSlider("Tubes",       _tubeCount,   3, 14);
             _emptyTubes   = EditorGUILayout.IntSlider("Empty Tubes", _emptyTubes,  1, 4);
@@ -158,7 +155,7 @@ namespace SortPuzzle.Editor
             _difficulty = EditorGUILayout.IntSlider("Difficulty", _difficulty, 1, 10);
             if (GUILayout.Button("Auto-Generate", GUILayout.Height(26)))
             {
-                var gen = LevelGenerator.Generate(_difficulty, _worldIndex, _levelIndex, _capacity);
+                var gen = LevelGenerator.Generate(difficulty: _difficulty, levelIndex: _levelIndex, capacity: _capacity, emptyTubes: _emptyTubes);
                 if (gen != null)
                 {
                     _tubeCount=gen.TubeCount; _emptyTubes=gen.EmptyTubeCount;
@@ -204,7 +201,7 @@ namespace SortPuzzle.Editor
                 ld.GoldReward=_goldReward; ld.DifficultyRating=_difficulty;
                 ld.IsDailyLevel=_isDailyLevel;
                 ld.DisplayName=$"Level {_levelIndex+1}";
-                ld.name=$"Level_W{_worldIndex+1}_{(_levelIndex+1):D3}";
+                ld.name=$"Level_W1_{(_levelIndex+1):D3}"; // "W1" kept only for filename consistency with existing assets — World is no longer a real concept
                 ld.Tubes = new TubeRow[_tubeCount];
                 for (int i=0;i<_tubeCount;i++)
                 {
