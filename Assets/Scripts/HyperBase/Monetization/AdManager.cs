@@ -18,6 +18,7 @@ namespace HyperBase.Monetization
 
         private readonly AdConfig _config;
         private readonly EventBus _eventBus;
+        private readonly HyperBase.RemoteConfig.RemoteConfigManager _remoteConfig;
         private bool   _isNoAds;
         private bool   _bannerCreated;
         private float  _lastInterTime = float.MinValue;
@@ -28,11 +29,18 @@ namespace HyperBase.Monetization
         private Action<bool> _rewardCb;
 
         [Inject]
-        public AdManager(AdConfig config, EventBus eventBus)
+        public AdManager(AdConfig config, EventBus eventBus, HyperBase.RemoteConfig.RemoteConfigManager remoteConfig)
         {
-            _config   = config;
-            _eventBus = eventBus;
+            _config       = config;
+            _eventBus     = eventBus;
+            _remoteConfig = remoteConfig;
         }
+
+        // Remote-Config-driven values, falling back to the local AdConfig asset. Reads only
+        // from _config/_remoteConfig — kept self-contained per this class's flat-architecture rule.
+        private int   EffectiveMinLevel      => _remoteConfig.GetInt  (HyperBase.RemoteConfig.RCKeys.InterstitialMinLevel,    _config.InterstitialMinLevel);
+        private float EffectiveCooldown      => _remoteConfig.GetFloat(HyperBase.RemoteConfig.RCKeys.InterstitialCooldownSec, _config.InterstitialCooldownSeconds);
+        private bool  EffectiveBannerEnabled => _remoteConfig.GetBool (HyperBase.RemoteConfig.RCKeys.BannerEnabled,           _config.EnableBanner);
 
         // ── Init ─────────────────────────────────────────────────────────────────
 
@@ -108,7 +116,7 @@ namespace HyperBase.Monetization
                     MaxSdk.LoadRewardedAd(_config.RewardedAdUnitId);
                 }
 
-                if (_config.EnableBanner && _config.ShowBannerOnStart && !_isNoAds)
+                if (EffectiveBannerEnabled && _config.ShowBannerOnStart && !_isNoAds)
                 {
                     MaxSdk.CreateBanner(_config.BannerAdUnitId, _config.BannerPosition);
                     MaxSdk.SetBannerBackgroundColor(_config.BannerAdUnitId, Color.black);
@@ -123,7 +131,7 @@ namespace HyperBase.Monetization
         /// <summary>Shows the banner, creating it first if needed. No-op if banner/ads disabled or No-Ads active.</summary>
         public void ShowBanner()
         {
-            if (!_config.EnableAds || !_config.EnableBanner || _isNoAds) return;
+            if (!_config.EnableAds || !EffectiveBannerEnabled || _isNoAds) return;
             if (!_bannerCreated)
             {
                 MaxSdk.CreateBanner(_config.BannerAdUnitId, _config.BannerPosition);
@@ -159,8 +167,8 @@ public void DestroyBanner()
         {
             if (!_config.EnableAds || !_config.EnableInterstitial || _isNoAds)           return false;
             if (!MaxSdk.IsInterstitialReady(_config.InterstitialAdUnitId))               return false;
-            if (_currentLevel < _config.InterstitialMinLevel)                            return false;
-            if (Time.unscaledTime - _lastInterTime < _config.InterstitialCooldownSeconds) return false;
+            if (_currentLevel < EffectiveMinLevel)                                       return false;
+            if (Time.unscaledTime - _lastInterTime < EffectiveCooldown)                  return false;
             return true;
         }
 
@@ -172,8 +180,8 @@ public void DestroyBanner()
         {
             if (!_config.EnableAds || !_config.EnableInterstitial || _isNoAds)       return;
             if (!MaxSdk.IsInterstitialReady(_config.InterstitialAdUnitId))            return;
-            if (_currentLevel < _config.InterstitialMinLevel)                        return;
-            if (Time.unscaledTime - _lastInterTime < _config.InterstitialCooldownSeconds) return;
+            if (_currentLevel < EffectiveMinLevel)                                    return;
+            if (Time.unscaledTime - _lastInterTime < EffectiveCooldown)               return;
 
             MaxSdk.ShowInterstitial(_config.InterstitialAdUnitId, placement);
             _lastInterTime = Time.unscaledTime;

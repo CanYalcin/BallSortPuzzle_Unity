@@ -53,17 +53,15 @@ namespace SortPuzzle.UI.Screens
 
         private GoldManager  _gold;
         private BoostManager _boosts;
-        private IAPManager   _iap;
-        private BoostConfig  _config;
-        private UIManager    _ui;
+        private IAPManager   _iap;        private UIManager    _ui;
         private AudioManager _audio;
         private HyperBase.Data.SaveManager _save;
 
         [Inject]
         public void Construct(GoldManager gold, BoostManager boosts, IAPManager iap,
-                              BoostConfig config, UIManager ui, AudioManager audio,
+                              UIManager ui, AudioManager audio,
                               HyperBase.Data.SaveManager save)
-        { _gold = gold; _boosts = boosts; _iap = iap; _config = config; _ui = ui; _audio = audio; _save = save; }
+        { _gold = gold; _boosts = boosts; _iap = iap; _ui = ui; _audio = audio; _save = save; }
 
         protected override void Awake()
         {
@@ -112,9 +110,9 @@ namespace SortPuzzle.UI.Screens
             {
                 if (_goldBalanceLabel) _goldBalanceLabel.text = _gold.Balance.ToString("N0") + " gold";
 
-                if (_undoPriceLabel)      _undoPriceLabel.text      = _config.UndoGoldCost + "g";
+                if (_undoPriceLabel)      _undoPriceLabel.text      = _boosts.GetCost(BoostType.Undo) + "g";
                 if (_undoCountLabel)      _undoCountLabel.text      = "x" + _boosts.GetCount(BoostType.Undo);
-                if (_extraTubePriceLabel) _extraTubePriceLabel.text = _config.ExtraEmptyTubeGoldCost + "g";
+                if (_extraTubePriceLabel) _extraTubePriceLabel.text = _boosts.GetCost(BoostType.ExtraEmptyTube) + "g";
                 if (_extraTubeCountLabel) _extraTubeCountLabel.text = "x" + _boosts.GetCount(BoostType.ExtraEmptyTube);
 
                 if (_starterPackBanner) _starterPackBanner.SetActive(!_save.Data.StarterPackPurchased);

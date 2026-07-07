@@ -7,7 +7,7 @@ namespace HyperBase.Analytics
     {
         void Initialize();
         void LogLevelStart    (int levelIndex);
-        void LogLevelComplete (int levelIndex, float duration, int goldEarned);
+        void LogLevelComplete (int levelIndex, float duration, int goldEarned, int pourCount, int parMoves);
         void LogLevelFail     (int levelIndex, float duration);
         void LogAdShown       (string adType, string placement);
         void LogAdCompleted   (string adType, string placement, bool rewarded);

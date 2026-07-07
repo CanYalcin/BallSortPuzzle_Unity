@@ -86,7 +86,7 @@ namespace HyperBase.Monetization
                     }
                     else
                     {
-                        _eventBus.Publish(new OnPurchaseCompleted(productId));
+                        _eventBus.Publish(new OnPurchaseCompleted(productId, pkg.StoreProduct.Price, pkg.StoreProduct.CurrencyCode));
                         tcs.TrySetResult(true);
                     }
                 });

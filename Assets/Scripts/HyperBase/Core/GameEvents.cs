@@ -24,15 +24,18 @@ namespace HyperBase.Core
         public readonly float CompletionTime;
         public readonly bool  IsDaily;
         public readonly int   GoldEarned; // normal levels only — daily gold is decided later by DailyManager
-        public OnLevelCompleted(int levelIndex, float completionTime, bool isDaily = false, int goldEarned = 0)
-        { LevelIndex = levelIndex; CompletionTime = completionTime; IsDaily = isDaily; GoldEarned = goldEarned; }
+        public readonly int   PourCount;
+        public readonly int   ParMoves;
+        public OnLevelCompleted(int levelIndex, float completionTime, bool isDaily = false, int goldEarned = 0, int pourCount = 0, int parMoves = 0)
+        { LevelIndex = levelIndex; CompletionTime = completionTime; IsDaily = isDaily; GoldEarned = goldEarned; PourCount = pourCount; ParMoves = parMoves; }
     }
 
     /// <summary>Fired by LevelManager when the player fails a level.</summary>
     public readonly struct OnLevelFailed
     {
-        public readonly int LevelIndex;
-        public OnLevelFailed(int levelIndex) => LevelIndex = levelIndex;
+        public readonly int   LevelIndex;
+        public readonly float Duration; // seconds since this attempt began
+        public OnLevelFailed(int levelIndex, float duration = 0f) { LevelIndex = levelIndex; Duration = duration; }
     }
     /// <summary>Fired by AdManager when any ad impression is recorded. Carries the ad type and placement string.</summary>
     public readonly struct OnAdShown
@@ -56,7 +59,10 @@ namespace HyperBase.Core
     public readonly struct OnPurchaseCompleted
     {
         public readonly string ProductId;
-        public OnPurchaseCompleted(string productId) => ProductId = productId;
+        public readonly float  Price;
+        public readonly string CurrencyCode;
+        public OnPurchaseCompleted(string productId, float price = 0f, string currencyCode = "USD")
+        { ProductId = productId; Price = price; CurrencyCode = currencyCode; }
     }
 
     /// <summary>Fired by IAPManager when a purchase fails or is cancelled. Reason is the RevenueCat error description.</summary>

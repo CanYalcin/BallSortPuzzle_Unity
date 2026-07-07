@@ -35,6 +35,7 @@ namespace HyperBase.Bootstrap
         private readonly DailyManager     _daily;
         private readonly SceneLoader      _loader;
         private readonly HyperBase.Data.SaveManager _save;
+        private readonly HyperBase.RemoteConfig.RemoteConfigManager _remoteConfig;
 
         private readonly MainMenuScreen  _mainMenu;
         private readonly GameplayScreen  _gameplay;
@@ -46,7 +47,8 @@ namespace HyperBase.Bootstrap
         private DailyChallengeScreen _dailyChallenge;
         private ShopScreen           _shop;
         private int                  _levelsSinceAd;
-        private const int            InterstitialEveryN = 3;private System.Action<OnNoAdsActivated> _onNoAds;
+        private System.Action<OnNoAdsActivated> _onNoAds;
+        private int InterstitialEveryN => _remoteConfig.GetInt(HyperBase.RemoteConfig.RCKeys.InterstitialEveryNLevels, 3);
 
         [Inject]
         public GameSceneEntryPoint(
@@ -62,6 +64,7 @@ namespace HyperBase.Bootstrap
             DailyManager     daily,
             SceneLoader      loader,
             HyperBase.Data.SaveManager save,
+            HyperBase.RemoteConfig.RemoteConfigManager remoteConfig,
             MainMenuScreen   mainMenu,
             GameplayScreen   gameplay,
             WinScreen        win,
@@ -81,6 +84,7 @@ namespace HyperBase.Bootstrap
             _daily     = daily;
             _loader    = loader;
             _save      = save;
+            _remoteConfig = remoteConfig;
             _mainMenu  = mainMenu;
             _gameplay  = gameplay;
             _win       = win;
@@ -166,7 +170,7 @@ namespace HyperBase.Bootstrap
 private void OnPuzzleWon(SortPuzzle.OnPuzzleWon e)
         {
             bool isDaily           = _levels.IsDailyMode;
-            int  goldActuallyAdded = isDaily ? 100 : e.GoldEarned; // e.GoldEarned is LevelData.GoldReward, computed once in PuzzleController.Pour()
+            int  goldActuallyAdded = isDaily ? _daily.ChallengeGoldReward : e.GoldEarned; // e.GoldEarned is LevelData.GoldReward, computed once in PuzzleController.Pour()
             _win.SetWinData(goldActuallyAdded, isDaily);
         }
 
@@ -185,8 +189,12 @@ private void OnPuzzleWon(SortPuzzle.OnPuzzleWon e)
                 _levelsSinceAd = 0;
             }
             _ads.SetCurrentLevel(_levels.CurrentIndex);
-            if (e.LevelIndex == 2 && !_save.Data.StarterPackPurchased && _shop != null)
+            int starterPackLevel = _remoteConfig.GetInt(HyperBase.RemoteConfig.RCKeys.StarterPackPopupLevel, 2);
+            if (e.LevelIndex == starterPackLevel && !_save.Data.StarterPackPurchased && _shop != null)
+            {
+                _events.Publish(new SortPuzzle.OnShopOpened("starter_pack_popup"));
                 _ui.ShowScreenAsync<ShopScreen>().Forget();
+            }
         }
 
 

@@ -33,7 +33,14 @@ namespace HyperBase.Core
 
         private void OnApplicationPause(bool paused)
         {
-            if (!paused) return;
+            if (!paused)
+            {
+                // Resuming — the guard below only prevents double-logging a single
+                // background/quit event; without this reset, backgrounding even once
+                // would silently disable session_end for the rest of the app's lifetime.
+                _sessionEndLogged = false;
+                return;
+            }
             _save?.Save();
             LogSessionEnd();
         }

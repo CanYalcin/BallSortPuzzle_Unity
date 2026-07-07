@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using HyperBase.Core;
 using SortPuzzle.Data;
+using UnityEngine;
 using VContainer;
 
 namespace SortPuzzle.Gameplay
@@ -27,11 +28,13 @@ namespace SortPuzzle.Gameplay
         private readonly EventBus          _events;
         private LevelData                  _level;
         private int                        _totalPours;
+        private float                       _attemptStartTime;
         private bool                       _solved;
         private int                        _extraTubesAdded;
 
         public int  TubeCount   => _tubes?.Length ?? 0;
-        public int  TotalPours  => _totalPours;
+        public int   TotalPours     => _totalPours;
+        public float AttemptElapsed => Time.unscaledTime - _attemptStartTime; // seconds since Initialize()/Restart()
         public bool IsSolved    => _solved;
         public bool CanUndoMove => _history.Count > 0;
 
@@ -49,9 +52,10 @@ namespace SortPuzzle.Gameplay
             _initialTubes    = new TubeData[_tubes.Length];
             for (int i = 0; i < _tubes.Length; i++) _initialTubes[i] = _tubes[i].Clone();
             _history.Clear();
-            _totalPours      = 0;
-            _solved          = false;
-            _extraTubesAdded = 0;
+            _totalPours       = 0;
+            _attemptStartTime = Time.unscaledTime;
+            _solved           = false;
+            _extraTubesAdded  = 0;
         }
 
         /// <summary>Returns the live tube state at <paramref name="index"/>. Used by TubeView for rendering.</summary>
@@ -115,6 +119,7 @@ namespace SortPuzzle.Gameplay
             }
 
             _history.Push(new MoveRecord(from, to, color, moveCount));
+            _totalPours++;
             _events.Publish(new SortPuzzle.OnPourMade(from, to, moveCount, color));
             OnPoured?.Invoke(from, to, color, moveCount);
 
@@ -173,12 +178,16 @@ namespace SortPuzzle.Gameplay
         {
             _tubes = new TubeData[_initialTubes.Length];
             for (int i = 0; i < _initialTubes.Length; i++) _tubes[i] = _initialTubes[i].Clone();
+            int   endedPours    = _totalPours;
+            float endedDuration = AttemptElapsed;
+
             _history.Clear();
-            _totalPours      = 0;
-            _solved          = false;
-            _extraTubesAdded = 0;
+            _totalPours       = 0;
+            _attemptStartTime = Time.unscaledTime;
+            _solved           = false;
+            _extraTubesAdded  = 0;
             OnRestarted?.Invoke();
-            _events.Publish(new SortPuzzle.OnPuzzleRestarted(_level?.LevelIndex ?? 0));
+            _events.Publish(new SortPuzzle.OnPuzzleRestarted(_level?.LevelIndex ?? 0, endedDuration, endedPours));
         }
 
         // ── Boost: Extra Empty Tube ───────────────────────────────────────────

@@ -56,6 +56,7 @@ namespace HyperBase.UI.Screens
         private void OnHome()
         {
             _audio.PlayButtonClick();
+            _levelController?.ReportAbandonIfNeeded();
             _save.SaveAsync().Forget();
             _game.TransitionTo(GameState.MainMenu);
         }

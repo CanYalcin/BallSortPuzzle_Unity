@@ -32,6 +32,7 @@ namespace SortPuzzle.Gameplay
         private GoldManager      _goldManager;
         private BoostSystem      _boostSystem;
         private VFXManager       _vfx;
+        private EventBus          _events;
         private HyperBase.UI.Screens.GameplayScreen _gameplayScreen;
 
         [Inject]
@@ -45,7 +46,36 @@ namespace SortPuzzle.Gameplay
             _goldManager  = goldManager;
             _boostSystem  = boostSystem;
             _vfx          = vfx;
+            _events       = events;
         }
+
+        /// <summary>
+        /// Publishes OnLevelFailed if the player made at least one move but is leaving
+        /// without winning. This project has no other lose-condition, so voluntary
+        /// mid-level abandonment is treated as the closest equivalent for analytics —
+        /// a direct signal for level-funnel/difficulty tracking. Call before navigating
+        /// away from the level (not called on Restart — that's normal retry behavior,
+        /// not abandonment).
+        /// </summary>
+        public void ReportAbandonIfNeeded()
+        {
+            if (_abandonReported) return;
+            if (_puzzle != null && _ld != null && _puzzle.TotalPours > 0 && !_puzzle.IsSolved)
+            {
+                _abandonReported = true;
+                _events.Publish(new OnLevelFailed(_ld.LevelIndex, _puzzle.AttemptElapsed));
+            }
+        }
+
+        // Android's home/app-switcher exit doesn't go through GameplayScreen.OnHome() at all —
+        // OnApplicationPause is the reliable cross-platform signal Unity gives for that. Also
+        // hooking OnApplicationQuit for parity and for Editor/Standalone testing, where Pause
+        // often doesn't fire the same way. Guarded by _abandonReported so a brief background
+        // (glance at a notification, then resume) doesn't spam duplicate reports for a puzzle
+        // the player is still actively mid-attempt on; the guard resets on the next pour or
+        // restart, so a later genuine abandonment on the same level still gets reported.
+        private void OnApplicationPause(bool pauseStatus) { if (pauseStatus) ReportAbandonIfNeeded(); }
+        private void OnApplicationQuit() => ReportAbandonIfNeeded();
 
                 private RectTransform VfxLayer => _canvasRoot != null ? _canvasRoot : _tubeContainer;
 private Vector2   _lastUndoScreenPos;
@@ -54,6 +84,7 @@ private Vector2   _lastUndoScreenPos;
         private int       _sel    = -1;
         private bool      _locked;
         private LevelData _ld;
+        private bool      _abandonReported;
 
         private void Start()
         {
@@ -82,7 +113,7 @@ private Vector2   _lastUndoScreenPos;
             {
                 Vector2 center = VfxLayer != null ? (Vector2)VfxLayer.TransformPoint(VfxLayer.rect.center) : Vector2.zero;
                 _vfx?.Play(VFXType.Confetti, VfxLayer, center);
-                _levelManager.CompleteCurrentLevel();
+                _levelManager.CompleteCurrentLevel(_puzzle.TotalPours);
             };
             _puzzle.OnUndone += OnPuzzleUndone;
 
@@ -178,7 +209,8 @@ private Vector2   _lastUndoScreenPos;
         /// <summary>Resets the puzzle to its initial state and refreshes all TubeViews.</summary>
         public void OnRestartPressed()
         {
-            _locked = false;
+            _locked          = false;
+            _abandonReported = false;
             _puzzle.Restart();
             if (_sel >= 0) { _views[_sel].SetSelected(false); _sel = -1; }
             for (int i = 0; i < _activeCount && i < _puzzle.TubeCount; i++)
@@ -260,7 +292,8 @@ private Vector2   _lastUndoScreenPos;
                         _vfx?.Play(VFXType.TubeComplete, VfxLayer, landPos);
                     _views[from].Refresh(_puzzle.GetTube(from));
                     _views[to].Refresh(_puzzle.GetTube(to));
-                    _locked = false;
+                    _locked          = false;
+                    _abandonReported = false;
                 });
         }
 

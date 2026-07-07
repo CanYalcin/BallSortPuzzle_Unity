@@ -35,8 +35,11 @@ namespace SortPuzzle
     /// <summary>Fired by PuzzleController when the puzzle is reset to its initial state.</summary>
     public readonly struct OnPuzzleRestarted
     {
-        public readonly int LevelIndex;
-        public OnPuzzleRestarted(int levelIndex) => LevelIndex = levelIndex;
+        public readonly int   LevelIndex;
+        public readonly float Duration;  // seconds spent on the attempt that just ended
+        public readonly int   PourCount; // pours made on the attempt that just ended
+        public OnPuzzleRestarted(int levelIndex, float duration = 0f, int pourCount = 0)
+        { LevelIndex = levelIndex; Duration = duration; PourCount = pourCount; }
     }
 
     // ── Gold ─────────────────────────────────────────────────────────────────
@@ -90,7 +93,16 @@ namespace SortPuzzle
         public OnBoostInsufficient(BoostType type) => Type = type;
     }
 
-    // ── Daily Challenge ───────────────────────────────────────────────────────
+        // ── Shop ─────────────────────────────────────────────────────────────────
+
+    /// <summary>Fired whenever the Shop screen is shown. Source identifies what triggered it.</summary>
+    public readonly struct OnShopOpened
+    {
+        public readonly string Source; // e.g. "menu", "starter_pack_popup"
+        public OnShopOpened(string source) => Source = source;
+    }
+
+// ── Daily Challenge ───────────────────────────────────────────────────────
 
     /// <summary>Fired by LevelManager when entering daily challenge mode.</summary>
     public readonly struct OnDailyChallengeStarted

@@ -62,7 +62,7 @@ namespace HyperBase.Gameplay
         /// index, and transitions to Win state. In daily mode, skips gold/boost grants.
         /// Publishes OnLevelCompleted.
         /// </summary>
-public void CompleteCurrentLevel()
+public void CompleteCurrentLevel(int pourCount = 0)
         {
             float dur = Time.unscaledTime - _startTime;
             var   cfg = CurrentLevel;
@@ -104,7 +104,7 @@ public void CompleteCurrentLevel()
                 d.HighestUnlockedLevel = Mathf.Max(d.HighestUnlockedLevel, d.CurrentLevelIndex);
             }
 
-            _events.Publish(new OnLevelCompleted(completedIdx, dur, false, ld != null ? ld.GoldReward : 0));
+            _events.Publish(new OnLevelCompleted(completedIdx, dur, false, ld != null ? ld.GoldReward : 0, pourCount, ld != null ? ld.ParMoves : 0));
             _game.TransitionTo(GameState.Win);
             _save.SaveAsync().Forget();
         }
@@ -112,7 +112,8 @@ public void CompleteCurrentLevel()
         /// <summary>Fails the current level. Publishes OnLevelFailed and transitions to Fail state.</summary>
         public void FailCurrentLevel()
         {
-            _events.Publish(new OnLevelFailed(_save.Data.CurrentLevelIndex));
+            float dur = Time.unscaledTime - _startTime;
+            _events.Publish(new OnLevelFailed(_save.Data.CurrentLevelIndex, dur));
             _game.TransitionTo(GameState.Fail);
             _save.SaveAsync().Forget();
         }

@@ -25,10 +25,18 @@ namespace SortPuzzle.Economy
         private readonly EventBus    _events;
         private readonly GoldManager _gold;
         private readonly BoostConfig _config;
+        private readonly HyperBase.RemoteConfig.RemoteConfigManager _remoteConfig;
 
         [Inject]
-        public BoostManager(SaveManager save, EventBus events, GoldManager gold, BoostConfig config)
-        { _save = save; _events = events; _gold = gold; _config = config; }
+        public BoostManager(SaveManager save, EventBus events, GoldManager gold, BoostConfig config, HyperBase.RemoteConfig.RemoteConfigManager remoteConfig)
+        { _save = save; _events = events; _gold = gold; _config = config; _remoteConfig = remoteConfig; }
+
+        /// <summary>Current gold cost for one of this boost, Remote-Config-driven with the local BoostConfig asset as fallback.</summary>
+        public int GetCost(BoostType type)
+        {
+            string key = type == BoostType.Undo ? HyperBase.RemoteConfig.RCKeys.BoostUndoGoldCost : HyperBase.RemoteConfig.RCKeys.BoostExtraTubeGoldCost;
+            return _remoteConfig.GetInt(key, _config.GetCost(type));
+        }
 
         /// <summary>Returns current inventory count for the given boost type.</summary>
         public int GetCount(BoostType type) => type switch
@@ -76,7 +84,7 @@ namespace SortPuzzle.Economy
         /// </summary>
         public bool TryBuyWithGold(BoostType type)
         {
-            int cost = _config.GetCost(type);
+            int cost = GetCost(type);
             if (!_gold.TrySpend(cost, "boost_" + type.ToString().ToLower())) return false;
             Grant(type, 1);
             return true;

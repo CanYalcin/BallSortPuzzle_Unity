@@ -99,7 +99,7 @@ namespace HyperBase.UI.Screens
         private void OnSettings() { _audio.PlayButtonClick(); _ui.ShowScreenAsync<SettingsScreen>().Forget(); }
         private void OnNoAds()    { _audio.PlayButtonClick(); _iap.PurchaseAsync(IAPManager.ProductIds.NoAds).Forget(); }
         private void OnDaily()    { _audio.PlayButtonClick(); _ui.ShowScreenAsync<DailyChallengeScreen>().Forget(); }
-        private void OnShop()     { _audio.PlayButtonClick(); _ui.ShowScreenAsync<ShopScreen>().Forget(); }
+        private void OnShop()     { _audio.PlayButtonClick(); _events.Publish(new SortPuzzle.OnShopOpened("menu")); _ui.ShowScreenAsync<ShopScreen>().Forget(); }
         private void OnNoAdsActivated(OnNoAdsActivated _) { if (_noAdsBtn) _noAdsBtn.gameObject.SetActive(false); }
     }
 }

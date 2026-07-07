@@ -18,6 +18,8 @@ namespace SortPuzzle.DailyChallenge
         private readonly DailyLevelDatabase _db;
         private readonly DailyRewardConfig  _rewards;
         private readonly NotificationManager _notifications;
+        private readonly BoostConfig _boostConfig;
+        private readonly HyperBase.RemoteConfig.RemoteConfigManager _remoteConfig;
 
         public int  CurrentStreak  => _save.Data.CurrentStreakDays;
         public int  LongestStreak  => _save.Data.LongestStreakDays;
@@ -30,7 +32,8 @@ namespace SortPuzzle.DailyChallenge
         [Inject]
         public DailyManager(SaveManager save, EventBus events, GoldManager gold,
                             BoostManager boosts, DailyLevelDatabase db, DailyRewardConfig rewards,
-                            NotificationManager notifications)
+                            NotificationManager notifications, BoostConfig boostConfig,
+                            HyperBase.RemoteConfig.RemoteConfigManager remoteConfig)
         {
             _save          = save;
             _events        = events;
@@ -39,7 +42,12 @@ namespace SortPuzzle.DailyChallenge
             _db            = db;
             _rewards       = rewards;
             _notifications = notifications;
+            _boostConfig   = boostConfig;
+            _remoteConfig  = remoteConfig;
         }
+
+        /// <summary>Gold reward for completing today's challenge, Remote-Config-driven with BoostConfig as local fallback.</summary>
+        public int ChallengeGoldReward => _remoteConfig.GetInt(HyperBase.RemoteConfig.RCKeys.DailyChallengeGoldReward, _boostConfig.DailyChallengeGold);
 
         // ── Query ─────────────────────────────────────────────────────────────
 
@@ -132,10 +140,11 @@ namespace SortPuzzle.DailyChallenge
             if (_save.Data.DailyCompletedFlags != null && daySlot < _save.Data.DailyCompletedFlags.Length)
                 _save.Data.DailyCompletedFlags[daySlot] = true;
 
-            _gold.Add(100, "daily_challenge");
+            int reward = ChallengeGoldReward;
+            _gold.Add(reward, "daily_challenge");
 
             int streak = _save.Data.CurrentStreakDays;
-            _events.Publish(new SortPuzzle.OnDailyChallengeCompleted(daySlot, streak, 100));
+            _events.Publish(new SortPuzzle.OnDailyChallengeCompleted(daySlot, streak, reward));
 
             var milestone = _rewards?.GetReward(streak);
             if (milestone != null)

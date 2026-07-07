@@ -110,6 +110,14 @@ namespace HyperBase.Bootstrap
             // 6. Remote Config
             await _remoteConfig.FetchAndActivateAsync(ct);
 
+            // 6b. Starting gold balance — fresh installs only. TotalSessionCount was already
+            // incremented in step 1, so ==1 here means this is genuinely the player's first
+            // ever launch. Must happen after RC fetch (this step) so a live-tuned starting
+            // balance takes effect, but before the player can touch gold at all (still well
+            // before MainMenu loads).
+            if (_save.Data.TotalSessionCount == 1)
+                _save.Data.GoldBalance = _remoteConfig.GetInt(RCKeys.StartingGoldBalance, 100);
+
             // 7. Analytics
             _analytics.RegisterProvider(new FirebaseAnalyticsProvider());
             _analytics.RegisterProvider(new GameAnalyticsProvider());

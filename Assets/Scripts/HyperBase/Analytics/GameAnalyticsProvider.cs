@@ -16,8 +16,15 @@ namespace HyperBase.Analytics
         public void LogLevelStart(int idx)
             => GameAnalytics.NewProgressionEvent(GAProgressionStatus.Start, $"Level_{idx:000}");
 
-        public void LogLevelComplete(int idx, float dur, int gold)
-            => GameAnalytics.NewProgressionEvent(GAProgressionStatus.Complete, $"Level_{idx:000}", (int)dur);
+        public void LogLevelComplete(int idx, float dur, int gold, int pourCount, int parMoves)
+        {
+            GameAnalytics.NewProgressionEvent(GAProgressionStatus.Complete, $"Level_{idx:000}", (int)dur);
+            // Progression events only carry one numeric "score" slot (duration, above) — pour
+            // count/par are logged as a supplementary design event, GameAnalytics' idiomatic
+            // way to extend beyond the core progression schema.
+            GameAnalytics.NewDesignEvent($"LevelComplete:Pours:{idx:000}", pourCount);
+            GameAnalytics.NewDesignEvent($"LevelComplete:Par:{idx:000}", parMoves);
+        }
 
         public void LogLevelFail(int idx, float dur)
             => GameAnalytics.NewProgressionEvent(GAProgressionStatus.Fail, $"Level_{idx:000}", (int)dur);

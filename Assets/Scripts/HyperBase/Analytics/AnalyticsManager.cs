@@ -14,9 +14,11 @@ namespace HyperBase.Analytics
     {
         private readonly List<IAnalyticsProvider> _providers = new();
         private readonly EventBus _events;
+        private readonly HyperBase.RemoteConfig.RemoteConfigManager _remoteConfig;
 
         [Inject]
-        public AnalyticsManager(EventBus events) => _events = events;
+        public AnalyticsManager(EventBus events, HyperBase.RemoteConfig.RemoteConfigManager remoteConfig)
+        { _events = events; _remoteConfig = remoteConfig; }
 
         public void RegisterProvider(IAnalyticsProvider p)
         {
@@ -29,15 +31,31 @@ namespace HyperBase.Analytics
         {
             // Core level events
             _events.Subscribe<OnLevelStarted>    (e => LogLevelStart   (e.LevelIndex));
-            _events.Subscribe<OnLevelCompleted>  (e => LogLevelComplete(e.LevelIndex, e.CompletionTime, e.IsDaily ? 100 : e.GoldEarned));
-            _events.Subscribe<OnLevelFailed>     (e => LogLevelFail    (e.LevelIndex, 0f));
+            _events.Subscribe<OnLevelCompleted>  (e => LogLevelComplete(e.LevelIndex, e.CompletionTime,
+                e.IsDaily ? _remoteConfig.GetInt(HyperBase.RemoteConfig.RCKeys.DailyChallengeGoldReward, 100) : e.GoldEarned,
+                e.PourCount, e.ParMoves));
+            _events.Subscribe<OnLevelFailed>     (e => LogLevelFail    (e.LevelIndex, e.Duration));
 
             // Ad events
             _events.Subscribe<OnAdShown>          (e => LogAdShown    (e.AdType.ToString(), "auto"));
             _events.Subscribe<OnAdCompleted>      (e => LogAdCompleted(e.AdType.ToString(), "auto", e.Success));
 
             // IAP
-            _events.Subscribe<OnPurchaseCompleted>(e => LogPurchase(e.ProductId, 0, "USD"));
+            _events.Subscribe<OnPurchaseCompleted>(e => LogPurchase(e.ProductId, e.Price, e.CurrencyCode));
+
+                        // Restart tracking — Model A: each restart logs the attempt that just ended
+            // (its own duration + pours) as its own record, distinct from level_complete
+            // (the attempt that actually won) and level_fail (abandoned without winning).
+            _events.Subscribe<SortPuzzle.OnPuzzleRestarted>(e => LogEvent("puzzle_restarted",
+                new Dictionary<string, object> { { "level_index", e.LevelIndex }, { "duration", e.Duration }, { "pour_count", e.PourCount } }));
+
+// Pour tracking
+            _events.Subscribe<SortPuzzle.OnPourMade>(e => LogEvent("pour_made",
+                new Dictionary<string, object> { { "from", e.FromTube }, { "to", e.ToTube }, { "ball_count", e.BallCount } }));
+
+            // Shop
+            _events.Subscribe<SortPuzzle.OnShopOpened>(e => LogEvent("shop_opened",
+                new Dictionary<string, object> { { "source", e.Source } }));
 
             // Boost events
             _events.Subscribe<SortPuzzle.OnBoostUsed>    (e => LogEvent("boost_used",
@@ -64,7 +82,7 @@ namespace HyperBase.Analytics
         }
 
         public void LogLevelStart    (int idx)                                    => Fan(p => p.LogLevelStart(idx));
-        public void LogLevelComplete (int idx, float dur, int gold)               => Fan(p => p.LogLevelComplete(idx, dur, gold));
+        public void LogLevelComplete (int idx, float dur, int gold, int pourCount, int parMoves) => Fan(p => p.LogLevelComplete(idx, dur, gold, pourCount, parMoves));
         public void LogLevelFail     (int idx, float dur)                         => Fan(p => p.LogLevelFail(idx, dur));
         public void LogAdShown       (string t, string pl)                        => Fan(p => p.LogAdShown(t, pl));
         public void LogAdCompleted   (string t, string pl, bool r)                => Fan(p => p.LogAdCompleted(t, pl, r));

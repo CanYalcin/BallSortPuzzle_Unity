@@ -17,11 +17,16 @@ namespace HyperBase.RemoteConfig
 
         private readonly Dictionary<string, object> _defaults = new()
         {
-            { RCKeys.InterstitialCooldownSec, 30   },
-            { RCKeys.InterstitialMinLevel,    3    },
-            { RCKeys.RewardedMultiplier,      2    },
+            { RCKeys.InterstitialCooldownSec,  30   },
+            { RCKeys.InterstitialMinLevel,     2    },
+            { RCKeys.RewardedMultiplier,       3    },
             { RCKeys.StartingGoldBalance,      100  },
-            { RCKeys.BannerEnabled,           true },
+            { RCKeys.BannerEnabled,            true },
+            { RCKeys.InterstitialEveryNLevels, 2    },
+            { RCKeys.BoostUndoGoldCost,        500  },
+            { RCKeys.BoostExtraTubeGoldCost,   1200 },
+            { RCKeys.DailyChallengeGoldReward, 100  },
+            { RCKeys.StarterPackPopupLevel,    3    },
         };
 
         public async UniTask FetchAndActivateAsync(CancellationToken ct = default)
@@ -45,10 +50,15 @@ namespace HyperBase.RemoteConfig
 
     public static class RCKeys
     {
-        public const string InterstitialCooldownSec = "interstitial_cooldown_sec";
-        public const string InterstitialMinLevel    = "interstitial_min_level";
-        public const string RewardedMultiplier      = "rewarded_multiplier";
+        public const string InterstitialCooldownSec  = "interstitial_cooldown_sec";
+        public const string InterstitialMinLevel     = "interstitial_min_level";
+        public const string RewardedMultiplier       = "rewarded_multiplier";
         public const string StartingGoldBalance      = "starting_gold_balance";
-        public const string BannerEnabled           = "banner_enabled";
+        public const string BannerEnabled            = "banner_enabled";
+        public const string InterstitialEveryNLevels = "interstitial_every_n_levels";
+        public const string BoostUndoGoldCost        = "boost_undo_gold_cost";
+        public const string BoostExtraTubeGoldCost   = "boost_extra_tube_gold_cost";
+        public const string DailyChallengeGoldReward = "daily_challenge_gold_reward";
+        public const string StarterPackPopupLevel    = "starter_pack_popup_level";
     }
 }

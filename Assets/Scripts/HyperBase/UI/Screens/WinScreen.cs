@@ -21,13 +21,14 @@ namespace HyperBase.UI.Screens
         private AdManager    _ads;
         private EventBus     _events;
         private GoldManager  _gold;
+        private HyperBase.RemoteConfig.RemoteConfigManager _remoteConfig;
 
         private int  _baseGold;
         private bool _isDaily;
 
         [Inject]
-        public void Construct(GameManager game, AudioManager audio, AdManager ads, EventBus events, GoldManager gold)
-        { _game = game; _audio = audio; _ads = ads; _events = events; _gold = gold; }
+        public void Construct(GameManager game, AudioManager audio, AdManager ads, EventBus events, GoldManager gold, HyperBase.RemoteConfig.RemoteConfigManager remoteConfig)
+        { _game = game; _audio = audio; _ads = ads; _events = events; _gold = gold; _remoteConfig = remoteConfig; }
 
         protected override void Awake()
         {
@@ -87,8 +88,9 @@ namespace HyperBase.UI.Screens
             {
                 if (!success) return;
                 _events.Publish(new OnAdCompleted(AdType.Rewarded, true));
-                int tripled = _baseGold * 3;
-                _gold.Add(_baseGold * 2, "triple_gold_win"); // base 1x was already credited by LevelManager before this screen showed — only add the extra 2x
+                int extraMultiplier = _remoteConfig.GetInt(HyperBase.RemoteConfig.RCKeys.RewardedMultiplier, 2);
+                int tripled = _baseGold * (1 + extraMultiplier);
+                _gold.Add(_baseGold * extraMultiplier, "triple_gold_win"); // base 1x was already credited by LevelManager before this screen showed — only add the extra multiplier's worth
                 if (_goldEarnedLabel) _goldEarnedLabel.text = $"+{tripled} gold";
                 if (_tripleGoldBtn)   _tripleGoldBtn.gameObject.SetActive(false);
             }, "triple_gold_win");
